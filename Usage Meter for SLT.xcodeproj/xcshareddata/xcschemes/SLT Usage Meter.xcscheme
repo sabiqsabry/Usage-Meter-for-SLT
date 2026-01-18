@@ -15,10 +15,24 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3367074E2F01519000403CAB"
+               BuildableName = "SLT Usage Meter WidgetExtension.appex"
+               BlueprintName = "SLT Usage Meter WidgetExtension"
+               ReferencedContainer = "container:Usage Meter for SLT.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "335B8A6F2C312530002CC442"
-               BuildableName = "SLT Usage Meter.app"
+               BuildableName = "Usage Meter for SLT.app"
                BlueprintName = "SLT Usage Meter"
-               ReferencedContainer = "container:SLT Usage Meter.xcodeproj">
+               ReferencedContainer = "container:Usage Meter for SLT.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -40,16 +54,6 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "335B8A6F2C312530002CC442"
-            BuildableName = "SLT Usage Meter.app"
-            BlueprintName = "SLT Usage Meter"
-            ReferencedContainer = "container:SLT Usage Meter.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -57,22 +61,22 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "335B8A6F2C312530002CC442"
-            BuildableName = "SLT Usage Meter.app"
-            BlueprintName = "SLT Usage Meter"
-            ReferencedContainer = "container:SLT Usage Meter.xcodeproj">
+            BlueprintIdentifier = "3367074E2F01519000403CAB"
+            BuildableName = "SLT Usage Meter WidgetExtension.appex"
+            BlueprintName = "SLT Usage Meter WidgetExtension"
+            ReferencedContainer = "container:Usage Meter for SLT.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
    </AnalyzeAction>
    <ArchiveAction
       buildConfiguration = "Release"
+      customArchiveName = "Usage Meter for SLT"
       revealArchiveInOrganizer = "YES">
    </ArchiveAction>
 </Scheme>
