@@ -8,7 +8,7 @@
 
 # Navigate to the Shared directory relative to the repository root
 # Adjust the path if your repository structure is different
-cd "$CI_PRIMARY_REPOSITORY_PATH/Usage-Meter-for-SLT/Shared" || exit 1
+cd "$CI_PRIMARY_REPOSITORY_PATH/SLT Usage Meter/Shared" || exit 1
 
 # Create Secrets.swift using the CLIENT_ID environment variable
 echo "Creating Secrets.swift..."
