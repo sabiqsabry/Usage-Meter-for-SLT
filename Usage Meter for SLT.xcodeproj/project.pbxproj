@@ -65,7 +65,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		335B8A702C312530002CC442 /* SLT Usage Meter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "SLT Usage Meter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		335B8A702C312530002CC442 /* Usage Meter for SLT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Usage Meter for SLT.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		335B8A732C312530002CC442 /* SLT_Usage_MeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLT_Usage_MeterApp.swift; sourceTree = "<group>"; };
 		335B8A752C312530002CC442 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		335B8A782C312530002CC442 /* SLT_Usage_Meter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLT_Usage_Meter.xcdatamodel; sourceTree = "<group>"; };
@@ -136,7 +136,7 @@
 		335B8A712C312530002CC442 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				335B8A702C312530002CC442 /* SLT Usage Meter.app */,
+				335B8A702C312530002CC442 /* Usage Meter for SLT.app */,
 				3367074F2F01519000403CAB /* SLT Usage Meter WidgetExtension.appex */,
 			);
 			name = Products;
@@ -210,7 +210,7 @@
 			);
 			name = "SLT Usage Meter";
 			productName = "SLT Usage Meter";
-			productReference = 335B8A702C312530002CC442 /* SLT Usage Meter.app */;
+			productReference = 335B8A702C312530002CC442 /* Usage Meter for SLT.app */;
 			productType = "com.apple.product-type.application";
 		};
 		3367074E2F01519000403CAB /* SLT Usage Meter WidgetExtension */ = {
@@ -487,7 +487,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Usage Meter for SLT";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
@@ -534,7 +534,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
 				MARKETING_VERSION = 1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Usage Meter for SLT";
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
