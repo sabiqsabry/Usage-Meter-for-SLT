@@ -1,0 +1,29 @@
+# Xcode
+.DS_Store
+*/.DS_Store
+*.swp
+*.lock
+*~.nib
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+DerivedData/
+build/
+*.hmap
+*.xccheckout
+*.moved-aside
+*.xu
+*.csstore
+package-lock.json
+
+# CocoaPods
+Pods/
+*.xcworkspace/
+
+# Swift PM
+.build/
+
+# Secrets
+Secrets.swift

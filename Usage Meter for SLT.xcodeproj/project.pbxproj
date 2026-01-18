@@ -1,0 +1,696 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 70;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		335B8A742C312530002CC442 /* SLT_Usage_MeterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A732C312530002CC442 /* SLT_Usage_MeterApp.swift */; };
+		335B8A762C312530002CC442 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A752C312530002CC442 /* Persistence.swift */; };
+		335B8A792C312530002CC442 /* SLT_Usage_Meter.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A772C312530002CC442 /* SLT_Usage_Meter.xcdatamodeld */; };
+		335B8A7B2C312530002CC442 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A7A2C312530002CC442 /* ContentView.swift */; };
+		335B8A7D2C312531002CC442 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 335B8A7C2C312531002CC442 /* Assets.xcassets */; };
+		335B8A812C312531002CC442 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 335B8A802C312531002CC442 /* Preview Assets.xcassets */; };
+		335B8A8A2C312677002CC442 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A892C312677002CC442 /* LoginView.swift */; };
+		335B8A8C2C312683002CC442 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A8B2C312683002CC442 /* MainView.swift */; };
+		335B8A912C312683002CC442 /* UsageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A902C312683002CC442 /* UsageView.swift */; };
+		335B8A932C312683002CC442 /* AccountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335B8A922C312683002CC442 /* AccountView.swift */; };
+		336707502F01519100403CAB /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335B8AA62C3127B4002CC442 /* WidgetKit.framework */; };
+		336707512F01519100403CAB /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 335B8AA82C3127B4002CC442 /* SwiftUI.framework */; };
+		3367075E2F01519200403CAB /* SLT Usage Meter WidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3367074F2F01519000403CAB /* SLT Usage Meter WidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		3368CB8F2F1CE17200F26990 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3368CB8D2F1CE17200F26990 /* Secrets.swift */; };
+		3368CB912F1CE17200F26990 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3368CB8D2F1CE17200F26990 /* Secrets.swift */; };
+		339535F82F0C4D7100DF1AC2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F52F0C4D7100DF1AC2 /* Models.swift */; };
+		339535F92F0C4D7100DF1AC2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F42F0C4D7100DF1AC2 /* Constants.swift */; };
+		339535FA2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */; };
+		339535FB2F0C4D7100DF1AC2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F52F0C4D7100DF1AC2 /* Models.swift */; };
+		339535FC2F0C4D7100DF1AC2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F42F0C4D7100DF1AC2 /* Constants.swift */; };
+		339535FD2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3367075C2F01519200403CAB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 335B8A682C312530002CC442 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3367074E2F01519000403CAB;
+			remoteInfo = "SLT Usage Meter WidgetExtension";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		335B8A9D2C3126A3002CC442 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		335B8ABA2C3127B5002CC442 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				3367075E2F01519200403CAB /* SLT Usage Meter WidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		335B8A702C312530002CC442 /* Usage Meter for SLT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Usage Meter for SLT.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		335B8A732C312530002CC442 /* SLT_Usage_MeterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SLT_Usage_MeterApp.swift; sourceTree = "<group>"; };
+		335B8A752C312530002CC442 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		335B8A782C312530002CC442 /* SLT_Usage_Meter.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SLT_Usage_Meter.xcdatamodel; sourceTree = "<group>"; };
+		335B8A7A2C312530002CC442 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		335B8A7C2C312531002CC442 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		335B8A7E2C312531002CC442 /* SLT_Usage_Meter.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SLT_Usage_Meter.entitlements; sourceTree = "<group>"; };
+		335B8A802C312531002CC442 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		335B8A892C312677002CC442 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		335B8A8B2C312683002CC442 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		335B8A902C312683002CC442 /* UsageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsageView.swift; sourceTree = "<group>"; };
+		335B8A922C312683002CC442 /* AccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountView.swift; sourceTree = "<group>"; };
+		335B8AA62C3127B4002CC442 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		335B8AA82C3127B4002CC442 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		335DC32C2F01555A003FF565 /* SLT Usage Meter Widget/SLT Usage Meter WidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "SLT Usage Meter Widget/SLT Usage Meter WidgetExtension.entitlements"; sourceTree = "<group>"; };
+		3367074F2F01519000403CAB /* SLT Usage Meter WidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "SLT Usage Meter WidgetExtension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3368CB8D2F1CE17200F26990 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		3368CB932F1CE1B700F26990 /* Secrets.example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.example.swift; sourceTree = "<group>"; };
+		339535F42F0C4D7100DF1AC2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		339535F52F0C4D7100DF1AC2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		336707612F01519200403CAB /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3367074E2F01519000403CAB /* SLT Usage Meter WidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		336707522F01519100403CAB /* SLT Usage Meter Widget */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (336707612F01519200403CAB /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "SLT Usage Meter Widget"; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		335B8A6D2C312530002CC442 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3367074C2F01519000403CAB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				336707512F01519100403CAB /* SwiftUI.framework in Frameworks */,
+				336707502F01519100403CAB /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		335B8A672C312530002CC442 = {
+			isa = PBXGroup;
+			children = (
+				335DC32C2F01555A003FF565 /* SLT Usage Meter Widget/SLT Usage Meter WidgetExtension.entitlements */,
+				335B8A722C312530002CC442 /* SLT Usage Meter */,
+				336707522F01519100403CAB /* SLT Usage Meter Widget */,
+				335B8AA52C3127B4002CC442 /* Frameworks */,
+				335B8A712C312530002CC442 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		335B8A712C312530002CC442 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				335B8A702C312530002CC442 /* Usage Meter for SLT.app */,
+				3367074F2F01519000403CAB /* SLT Usage Meter WidgetExtension.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		335B8A722C312530002CC442 /* SLT Usage Meter */ = {
+			isa = PBXGroup;
+			children = (
+				335B8A732C312530002CC442 /* SLT_Usage_MeterApp.swift */,
+				335B8A752C312530002CC442 /* Persistence.swift */,
+				335B8A7A2C312530002CC442 /* ContentView.swift */,
+				335B8A892C312677002CC442 /* LoginView.swift */,
+				335B8A8B2C312683002CC442 /* MainView.swift */,
+				335B8A902C312683002CC442 /* UsageView.swift */,
+				335B8A922C312683002CC442 /* AccountView.swift */,
+				335B8A7C2C312531002CC442 /* Assets.xcassets */,
+				335B8A7E2C312531002CC442 /* SLT_Usage_Meter.entitlements */,
+				335B8A772C312530002CC442 /* SLT_Usage_Meter.xcdatamodeld */,
+				339535F72F0C4D7100DF1AC2 /* Shared */,
+				335B8A7F2C312531002CC442 /* Preview Content */,
+			);
+			path = "SLT Usage Meter";
+			sourceTree = "<group>";
+		};
+		335B8A7F2C312531002CC442 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				335B8A802C312531002CC442 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		335B8AA52C3127B4002CC442 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				335B8AA62C3127B4002CC442 /* WidgetKit.framework */,
+				335B8AA82C3127B4002CC442 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		339535F72F0C4D7100DF1AC2 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				3368CB932F1CE1B700F26990 /* Secrets.example.swift */,
+				3368CB8D2F1CE17200F26990 /* Secrets.swift */,
+				339535F42F0C4D7100DF1AC2 /* Constants.swift */,
+				339535F52F0C4D7100DF1AC2 /* Models.swift */,
+				339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		335B8A6F2C312530002CC442 /* SLT Usage Meter */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 335B8A842C312531002CC442 /* Build configuration list for PBXNativeTarget "SLT Usage Meter" */;
+			buildPhases = (
+				335B8A6C2C312530002CC442 /* Sources */,
+				335B8A6D2C312530002CC442 /* Frameworks */,
+				335B8A6E2C312530002CC442 /* Resources */,
+				335B8A9D2C3126A3002CC442 /* Embed Frameworks */,
+				335B8ABA2C3127B5002CC442 /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3367075D2F01519200403CAB /* PBXTargetDependency */,
+			);
+			name = "SLT Usage Meter";
+			productName = "SLT Usage Meter";
+			productReference = 335B8A702C312530002CC442 /* Usage Meter for SLT.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3367074E2F01519000403CAB /* SLT Usage Meter WidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 336707622F01519200403CAB /* Build configuration list for PBXNativeTarget "SLT Usage Meter WidgetExtension" */;
+			buildPhases = (
+				3367074B2F01519000403CAB /* Sources */,
+				3367074C2F01519000403CAB /* Frameworks */,
+				3367074D2F01519000403CAB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				336707522F01519100403CAB /* SLT Usage Meter Widget */,
+			);
+			name = "SLT Usage Meter WidgetExtension";
+			packageProductDependencies = (
+			);
+			productName = "SLT Usage Meter WidgetExtension";
+			productReference = 3367074F2F01519000403CAB /* SLT Usage Meter WidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		335B8A682C312530002CC442 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 2620;
+				LastUpgradeCheck = 2620;
+				TargetAttributes = {
+					335B8A6F2C312530002CC442 = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					3367074E2F01519000403CAB = {
+						CreatedOnToolsVersion = 26.2;
+					};
+				};
+			};
+			buildConfigurationList = 335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "SLT Usage Meter" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 335B8A672C312530002CC442;
+			productRefGroup = 335B8A712C312530002CC442 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				335B8A6F2C312530002CC442 /* SLT Usage Meter */,
+				3367074E2F01519000403CAB /* SLT Usage Meter WidgetExtension */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		335B8A6E2C312530002CC442 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				335B8A812C312531002CC442 /* Preview Assets.xcassets in Resources */,
+				335B8A7D2C312531002CC442 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3367074D2F01519000403CAB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		335B8A6C2C312530002CC442 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3368CB912F1CE17200F26990 /* Secrets.swift in Sources */,
+				335B8A792C312530002CC442 /* SLT_Usage_Meter.xcdatamodeld in Sources */,
+				335B8A8C2C312683002CC442 /* MainView.swift in Sources */,
+				335B8A912C312683002CC442 /* UsageView.swift in Sources */,
+				335B8A932C312683002CC442 /* AccountView.swift in Sources */,
+				335B8A742C312530002CC442 /* SLT_Usage_MeterApp.swift in Sources */,
+				335B8A7B2C312530002CC442 /* ContentView.swift in Sources */,
+				339535FB2F0C4D7100DF1AC2 /* Models.swift in Sources */,
+				339535FC2F0C4D7100DF1AC2 /* Constants.swift in Sources */,
+				339535FD2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */,
+				335B8A8A2C312677002CC442 /* LoginView.swift in Sources */,
+				335B8A762C312530002CC442 /* Persistence.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3367074B2F01519000403CAB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				339535F82F0C4D7100DF1AC2 /* Models.swift in Sources */,
+				339535F92F0C4D7100DF1AC2 /* Constants.swift in Sources */,
+				3368CB8F2F1CE17200F26990 /* Secrets.swift in Sources */,
+				339535FA2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3367075D2F01519200403CAB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3367074E2F01519000403CAB /* SLT Usage Meter WidgetExtension */;
+			targetProxy = 3367075C2F01519200403CAB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		335B8A822C312531002CC442 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = P25X57A3R8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		335B8A832C312531002CC442 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = P25X57A3R8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		335B8A852C312531002CC442 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = "SLT Usage Meter/SLT_Usage_Meter.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"SLT Usage Meter/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Usage Meter for SLT";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
+				PRODUCT_NAME = "Usage Meter for SLT";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		335B8A862C312531002CC442 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = "SLT Usage Meter/SLT_Usage_Meter.entitlements";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				DEVELOPMENT_ASSET_PATHS = "\"SLT Usage Meter/Preview Content\"";
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SELECTED_FILES = readonly;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Usage Meter for SLT";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
+				PRODUCT_NAME = "Usage Meter for SLT";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3367075F2F01519200403CAB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = "SLT Usage Meter Widget/SLT Usage Meter WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SLT Usage Meter Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Usage Meter Widget for SLT";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "prabch.sltusage.SLT-Usage-Meter-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 2.6;
+			};
+			name = Debug;
+		};
+		336707602F01519200403CAB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_ALLOW_ENTITLEMENTS_MODIFICATION = YES;
+				CODE_SIGN_ENTITLEMENTS = "SLT Usage Meter Widget/SLT Usage Meter WidgetExtension.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "SLT Usage Meter Widget/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "Usage Meter Widget for SLT";
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 12.0;
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "prabch.sltusage.SLT-Usage-Meter-Widget";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SDKROOT = auto;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 2.6;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "SLT Usage Meter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				335B8A822C312531002CC442 /* Debug */,
+				335B8A832C312531002CC442 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		335B8A842C312531002CC442 /* Build configuration list for PBXNativeTarget "SLT Usage Meter" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				335B8A852C312531002CC442 /* Debug */,
+				335B8A862C312531002CC442 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		336707622F01519200403CAB /* Build configuration list for PBXNativeTarget "SLT Usage Meter WidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3367075F2F01519200403CAB /* Debug */,
+				336707602F01519200403CAB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		335B8A772C312530002CC442 /* SLT_Usage_Meter.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				335B8A782C312530002CC442 /* SLT_Usage_Meter.xcdatamodel */,
+			);
+			currentVersion = 335B8A782C312530002CC442 /* SLT_Usage_Meter.xcdatamodel */;
+			path = SLT_Usage_Meter.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 335B8A682C312530002CC442 /* Project object */;
+}
