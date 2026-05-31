@@ -64,6 +64,10 @@ struct AccountView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary.opacity(0.8))
                         .padding(.top, 8)
+                    
+                    Link("This project is open source", destination: URL(string: "https://github.com/prabch/Usage-Meter-for-SLT")!)
+                        .font(.caption2)
+                        .foregroundColor(.accentColor)
                 }
                 .padding(.horizontal)
                 .padding(.top, 20)
