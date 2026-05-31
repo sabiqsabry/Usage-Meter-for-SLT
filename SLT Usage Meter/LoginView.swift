@@ -18,6 +18,7 @@ struct LoginView: View {
     @State private var refreshToken: String = ""
     @State private var isLoading: Bool = false
     @State private var errorMessage: String = ""
+    @State private var isPasswordVisible: Bool = false
     
     let loginAction: (String) -> Void
     
@@ -122,16 +123,41 @@ struct LoginView: View {
                                     .fontWeight(.medium)
                                     .foregroundColor(.primary)
                                 
-                                SecureField("Enter your password", text: $password)
-                                    .textFieldStyle(.plain)
-                                    .padding()
-                                    .background(Color.gray.opacity(0.1))
-                                    .cornerRadius(10)
-                                    .onSubmit {
-                                        if !email.isEmpty && !password.isEmpty {
-                                            login()
-                                        }
+                                HStack {
+                                    if isPasswordVisible {
+                                        TextField("Enter your password", text: $password)
+                                            .textFieldStyle(.plain)
+                                            .disableAutocorrection(true)
+                                            #if os(iOS)
+                                            .autocapitalization(.none)
+                                            #endif
+                                            .onSubmit {
+                                                if !email.isEmpty && !password.isEmpty {
+                                                    login()
+                                                }
+                                            }
+                                    } else {
+                                        SecureField("Enter your password", text: $password)
+                                            .textFieldStyle(.plain)
+                                            .onSubmit {
+                                                if !email.isEmpty && !password.isEmpty {
+                                                    login()
+                                                }
+                                            }
                                     }
+                                    
+                                    Button(action: {
+                                        isPasswordVisible.toggle()
+                                    }) {
+                                        Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
+                                            .foregroundColor(.secondary)
+                                            .font(.body)
+                                    }
+                                    .buttonStyle(.plain)
+                                }
+                                .padding()
+                                .background(Color.gray.opacity(0.1))
+                                .cornerRadius(10)
                             }
                             
                             // Error Message
