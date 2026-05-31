@@ -23,13 +23,9 @@ struct ContentView: View {
                     self.accessToken = token
                     self.isLoggedIn = true
 
-                    // Store accessToken securely (e.g., UserDefaults (shared suite) or Keychain)
-                    if let defaults = UserDefaults(suiteName: "group.com.prabch.sltusage") {
-                        defaults.set(token, forKey: "accessToken")
-                        print("ContentView: Access token stored in shared UserDefaults.")
-                    } else {
-                        print("ContentView: Failed to load shared UserDefaults suite.")
-                    }
+                    // Store accessToken securely in Keychain
+                    KeychainHelper.shared.save(token, forKey: AppConstants.Keys.accessToken)
+                    print("ContentView: Access token stored securely in shared Keychain.")
                     
                     // Reload widget timelines
                     WidgetCenter.shared.reloadAllTimelines()
@@ -53,16 +49,11 @@ struct ContentView: View {
     }
     
     private func checkStoredCredentials() {
-        print("ContentView: Checking for stored credentials...")
+        print("ContentView: Checking for stored credentials in Keychain...")
         
-        guard let defaults = UserDefaults(suiteName: "group.com.prabch.sltusage") else {
-            print("ContentView: Failed to load shared UserDefaults suite.")
-            return
-        }
-        
-        // Check if we have a stored access token and username
-        if let storedAccessToken = defaults.string(forKey: "accessToken"),
-           let storedUsername = defaults.string(forKey: "username") {
+        // Check if we have a stored access token and username in Keychain
+        if let storedAccessToken = KeychainHelper.shared.read(forKey: AppConstants.Keys.accessToken),
+           let storedUsername = KeychainHelper.shared.read(forKey: AppConstants.Keys.username) {
             print("ContentView: Found stored credentials for user: \(storedUsername)")
             self.accessToken = storedAccessToken
             self.isLoggedIn = true
@@ -74,12 +65,11 @@ struct ContentView: View {
 
     private func logout() {
         print("ContentView: Logout triggered.")
-        if let defaults = UserDefaults(suiteName: "group.com.prabch.sltusage") {
-            defaults.removeObject(forKey: "accessToken")
-            defaults.removeObject(forKey: "refreshToken")
-            defaults.removeObject(forKey: "username")
-            print("ContentView: Tokens and username removed from shared UserDefaults.")
-        }
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.accessToken)
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.refreshToken)
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.username)
+        print("ContentView: Tokens and username removed from secure Keychain.")
+        
         self.accessToken = nil
         self.isLoggedIn = false
         print("ContentView: isLoggedIn set to false.")

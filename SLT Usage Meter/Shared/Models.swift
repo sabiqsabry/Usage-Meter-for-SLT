@@ -17,9 +17,32 @@ struct LoginResponse: Decodable {
     
     enum CodingKeys: String, CodingKey {
         case accessToken
+        case accessTokenSnake = "access_token"
         case refreshToken
+        case refreshTokenSnake = "refresh_token"
         case name
         case userId = "user_id"
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decode accessToken: try camelCase first, fallback to snake_case
+        if let token = try? container.decode(String.self, forKey: .accessToken) {
+            self.accessToken = token
+        } else {
+            self.accessToken = try container.decode(String.self, forKey: .accessTokenSnake)
+        }
+        
+        // Decode refreshToken: try camelCase first, fallback to snake_case
+        if let token = try? container.decode(String.self, forKey: .refreshToken) {
+            self.refreshToken = token
+        } else {
+            self.refreshToken = try container.decode(String.self, forKey: .refreshTokenSnake)
+        }
+        
+        self.name = try? container.decode(String.self, forKey: .name)
+        self.userId = try? container.decode(String.self, forKey: .userId)
     }
 }
 

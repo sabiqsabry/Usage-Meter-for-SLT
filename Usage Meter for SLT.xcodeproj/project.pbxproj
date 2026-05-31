@@ -253,7 +253,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "SLT Usage Meter" */;
+			buildConfigurationList = 335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "Usage Meter for SLT" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -485,7 +485,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
 				PRODUCT_NAME = "Usage Meter for SLT";
 				REGISTER_APP_GROUPS = YES;
@@ -532,7 +532,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = prabch.sltusage;
 				PRODUCT_NAME = "Usage Meter for SLT";
 				REGISTER_APP_GROUPS = YES;
@@ -577,7 +577,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "prabch.sltusage.SLT-Usage-Meter-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -629,7 +629,7 @@
 				);
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.1;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "prabch.sltusage.SLT-Usage-Meter-Widget";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				REGISTER_APP_GROUPS = YES;
@@ -650,7 +650,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "SLT Usage Meter" */ = {
+		335B8A6B2C312530002CC442 /* Build configuration list for PBXProject "Usage Meter for SLT" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				335B8A822C312531002CC442 /* Debug */,

@@ -11,6 +11,10 @@ struct AccountView: View {
     let serviceDetail: ServiceDetailBundle?
     let logoutAction: () -> Void
     
+    private var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+    
     var body: some View {
         ScrollView {
             VStack(spacing: 30) {
@@ -41,32 +45,36 @@ struct AccountView: View {
                 .buttonStyle(.plain)
                 .padding(.horizontal)
                 
-                
-                // Disclaimer and About
-                VStack(spacing: 12) {
-                    Text("Usage Meter for SLT is an independent app and is not affiliated with or endorsed by SLT Mobitel.")
-                        .font(.caption)
+                // About & Disclaimer Section
+                VStack(spacing: 8) {
+                    Text("Version \(appVersion)")
+                        .font(.footnote)
                         .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("The app helps SLT users monitor their data usage using SLT’s publicly available APIs.")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
-                    
-                    Text("No personal data is collected or stored externally; login credentials are used only to obtain a secure token, which is stored locally on your device.")
-                        .font(.caption)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                        .multilineTextAlignment(.center)
                     
                     Text("Developed by Prabhashwara")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                    
+                    VStack(spacing: 4) {
+                        Text("This project is open source")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                        
+                        Link("View on GitHub", destination: URL(string: "https://github.com/prabch/Usage-Meter-for-SLT")!)
+                            .font(.footnote)
+                            .foregroundColor(.accentColor)
+                    }
+                    .padding(.top, 4)
+                    
+                    Text("No personal data is collected or stored externally; login credentials are used only to obtain a secure token, which is stored securely in your device's Keychain.")
                         .font(.caption2)
-                        .foregroundColor(.secondary.opacity(0.8))
-                        .padding(.top, 8)
+                        .foregroundColor(.secondary.opacity(0.7))
+                        .multilineTextAlignment(.center)
+                        .lineSpacing(3)
+                        .padding(.top, 12)
                 }
-                .padding(.horizontal)
-                .padding(.top, 20)
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
                 
                 Spacer()
             }
