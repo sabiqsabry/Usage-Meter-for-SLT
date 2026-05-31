@@ -26,19 +26,18 @@ class NetworkManager {
     // MARK: - Auth Helpers
     
     var accessToken: String? {
-        get { UserDefaults(suiteName: AppConstants.suiteName)?.string(forKey: AppConstants.Keys.accessToken) }
+        get { KeychainHelper.shared.read(forKey: AppConstants.Keys.accessToken) }
     }
     
     var username: String? {
-        get { UserDefaults(suiteName: AppConstants.suiteName)?.string(forKey: AppConstants.Keys.username) }
+        get { KeychainHelper.shared.read(forKey: AppConstants.Keys.username) }
     }
     
     func logout() {
-        if let defaults = UserDefaults(suiteName: AppConstants.suiteName) {
-            defaults.removeObject(forKey: AppConstants.Keys.accessToken)
-            defaults.removeObject(forKey: AppConstants.Keys.refreshToken)
-            defaults.removeObject(forKey: AppConstants.Keys.username)
-        }
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.accessToken)
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.refreshToken)
+        KeychainHelper.shared.delete(forKey: AppConstants.Keys.username)
+        
         // Notification for App to show login screen
         NotificationCenter.default.post(name: NSNotification.Name("TokenExpired"), object: nil)
         
@@ -67,13 +66,11 @@ class NetworkManager {
         if httpResponse.statusCode == 200 {
             let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
             
-            // Save credentials
-            if let defaults = UserDefaults(suiteName: AppConstants.suiteName) {
-                defaults.set(loginResponse.accessToken, forKey: AppConstants.Keys.accessToken)
-                defaults.set(loginResponse.refreshToken, forKey: AppConstants.Keys.refreshToken)
-                defaults.set(username, forKey: AppConstants.Keys.username)
-                WidgetCenter.shared.reloadAllTimelines()
-            }
+            // Save credentials securely in Keychain
+            KeychainHelper.shared.save(loginResponse.accessToken, forKey: AppConstants.Keys.accessToken)
+            KeychainHelper.shared.save(loginResponse.refreshToken, forKey: AppConstants.Keys.refreshToken)
+            KeychainHelper.shared.save(username, forKey: AppConstants.Keys.username)
+            WidgetCenter.shared.reloadAllTimelines()
             
             return loginResponse.accessToken
         } else {
