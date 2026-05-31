@@ -23,6 +23,13 @@ class NetworkManager {
         return URLSession(configuration: configuration)
     }()
     
+    // Percent encode strings for application/x-www-form-urlencoded payloads
+    private func percentEncode(_ string: String) -> String {
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "+/=&?@#$*,;")
+        return string.addingPercentEncoding(withAllowedCharacters: allowed) ?? string
+    }
+    
     // MARK: - Auth Helpers
     
     var accessToken: String? {
@@ -49,12 +56,11 @@ class NetworkManager {
     
     func login(username: String, password: String) async throws -> String {
         let url = APIEndpoint.login.url
-        var request = URLRequest(url: url)
-        request.httpMethod = "POST"
-        request.setValue("application/x-www-form-urlencoded;charset=UTF-8", forHTTPHeaderField: "Content-Type")
-        request.setValue(AppConstants.API.clientId, forHTTPHeaderField: "X-Ibm-Client-Id")
+        var request = createBaseRequest(url: url, method: "POST", isUrlEncoded: true)
         
-        let body = "username=\(username)&password=\(password)&channelID=WEB"
+        let encodedUsername = percentEncode(username)
+        let encodedPassword = percentEncode(password)
+        let body = "username=\(encodedUsername)&password=\(encodedPassword)&channelID=WEB"
         request.httpBody = body.data(using: .utf8)
         
         let (data, response) = try await session.data(for: request)
@@ -121,7 +127,6 @@ class NetworkManager {
     // MARK: - Private Helpers
     
     // Helper function to convert phone number to international format
-    // Making it static/internal so it can be used if needed, or just private here if only used for API calls
     private func convertToInternationalFormat(_ phoneNumber: String) -> String {
         let cleaned = phoneNumber.replacingOccurrences(of: " ", with: "")
                                  .replacingOccurrences(of: "-", with: "")
@@ -134,15 +139,23 @@ class NetworkManager {
         return "94" + cleaned
     }
     
+    private func createBaseRequest(url: URL, method: String = "GET", isUrlEncoded: Bool = false) -> URLRequest {
+        var request = URLRequest(url: url)
+        request.httpMethod = method
+        request.setValue(AppConstants.API.clientId, forHTTPHeaderField: "X-Ibm-Client-Id")
+        if isUrlEncoded {
+            request.setValue("application/x-www-form-urlencoded;charset=UTF-8", forHTTPHeaderField: "Content-Type")
+        }
+        return request
+    }
+    
     private func createRequest(url: URL) throws -> URLRequest {
         guard let token = accessToken else {
             throw URLError(.userAuthenticationRequired)
         }
         
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
+        var request = createBaseRequest(url: url, method: "GET")
         request.setValue("bearer \(token)", forHTTPHeaderField: "authorization")
-        request.setValue(AppConstants.API.clientId, forHTTPHeaderField: "x-ibm-client-id")
         return request
     }
     
@@ -151,12 +164,88 @@ class NetworkManager {
         
         if let httpResponse = response as? HTTPURLResponse {
             if httpResponse.statusCode == 401 || httpResponse.statusCode == 403 {
-                // Token expired
-                logout()
-                throw URLError(.userAuthenticationRequired)
+                // Token expired. Let's try to refresh automatically!
+                do {
+                    print("NetworkManager: Access token expired. Attempting background token refresh...")
+                    let newAccessToken = try await TokenRefresher.shared.refresh(using: self)
+                    
+                    // Re-create request with the fresh token
+                    var retriedRequest = request
+                    retriedRequest.setValue("bearer \(newAccessToken)", forHTTPHeaderField: "authorization")
+                    
+                    print("NetworkManager: Token refresh successful. Retrying original request...")
+                    return try await session.data(for: retriedRequest)
+                } catch {
+                    print("NetworkManager: Token refresh failed with error: \(error). Logging out...")
+                    logout()
+                    throw URLError(.userAuthenticationRequired)
+                }
             }
         }
         
         return (data, response)
+    }
+    
+    // MARK: - Token Refresh
+    
+    func performTokenRefresh() async throws -> String {
+        guard let refreshToken = KeychainHelper.shared.read(forKey: AppConstants.Keys.refreshToken),
+              let username = KeychainHelper.shared.read(forKey: AppConstants.Keys.username) else {
+            throw URLError(.userAuthenticationRequired)
+        }
+        
+        let url = APIEndpoint.refreshToken.url
+        var request = createBaseRequest(url: url, method: "POST", isUrlEncoded: true)
+        
+        let encodedToken = percentEncode(refreshToken)
+        let encodedUsername = percentEncode(username)
+        let body = "username=\(encodedUsername)&refreshToken=\(encodedToken)&channelID=WEB"
+        request.httpBody = body.data(using: .utf8)
+        
+        let (data, response) = try await session.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw URLError(.badServerResponse)
+        }
+        
+        if httpResponse.statusCode == 200 {
+            let loginResponse = try JSONDecoder().decode(LoginResponse.self, from: data)
+            
+            // Save new credentials securely
+            KeychainHelper.shared.save(loginResponse.accessToken, forKey: AppConstants.Keys.accessToken)
+            KeychainHelper.shared.save(loginResponse.refreshToken, forKey: AppConstants.Keys.refreshToken)
+            
+            return loginResponse.accessToken
+        } else {
+            let responseString = String(data: data, encoding: .utf8) ?? "No response body"
+            throw NSError(domain: "Auth", code: httpResponse.statusCode, userInfo: [NSLocalizedDescriptionKey: "Token refresh failed with status \(httpResponse.statusCode): \(responseString)"])
+        }
+    }
+}
+
+// MARK: - TokenRefresher Actor
+
+actor TokenRefresher {
+    static let shared = TokenRefresher()
+    private init() {}
+    
+    private var activeTask: Task<String, Error>?
+    
+    func refresh(using manager: NetworkManager) async throws -> String {
+        // If a refresh is already in progress, await its result
+        if let existingTask = activeTask {
+            return try await existingTask.value
+        }
+        
+        // Spawn a new task to perform the refresh
+        let task = Task<String, Error> {
+            defer {
+                self.activeTask = nil
+            }
+            return try await manager.performTokenRefresh()
+        }
+        
+        activeTask = task
+        return try await task.value
     }
 }

@@ -27,6 +27,7 @@ enum APIEndpoint {
     case accountDetail(username: String)
     case usageSummary(subscriberID: String)
     case vasBundles(subscriberID: String)
+    case refreshToken
     
     var url: URL {
         switch self {
@@ -38,6 +39,8 @@ enum APIEndpoint {
             return URL(string: "\(AppConstants.API.baseURL)/BBVAS/UsageSummary?subscriberID=\(subscriberID)")!
         case .vasBundles(let subscriberID):
             return URL(string: "\(AppConstants.API.baseURL)/BBVAS/GetDashboardVASBundles?subscriberID=\(subscriberID)")!
+        case .refreshToken:
+            return URL(string: "\(AppConstants.API.baseURL)/Account/RefreshToken")!
         }
     }
 }
@@ -48,6 +51,8 @@ struct KeychainHelper {
     static let shared = KeychainHelper()
     private init() {}
     
+    private let serviceName = "SLT Usage Meter"
+    
     @discardableResult
     func save(_ value: String, forKey key: String) -> Bool {
         guard let data = value.data(using: .utf8) else { return false }
@@ -57,7 +62,9 @@ struct KeychainHelper {
         
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
+            kSecAttrLabel as String: "SLT \(key.capitalized)",
             kSecValueData as String: data,
             kSecAttrAccessible as String: kSecAttrAccessibleAfterFirstUnlock,
             kSecAttrSynchronizable as String: kCFBooleanTrue! // Enables iCloud Keychain sync
@@ -70,6 +77,7 @@ struct KeychainHelper {
     func read(forKey key: String) -> String? {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
             kSecReturnData as String: kCFBooleanTrue!,
             kSecMatchLimit as String: kSecMatchLimitOne,
@@ -89,6 +97,7 @@ struct KeychainHelper {
     func delete(forKey key: String) -> Bool {
         let query: [String: Any] = [
             kSecClass as String: kSecClassGenericPassword,
+            kSecAttrService as String: serviceName,
             kSecAttrAccount as String: key,
             kSecAttrSynchronizable as String: kSecAttrSynchronizableAny // Delete from both local and iCloud synced items
         ]
