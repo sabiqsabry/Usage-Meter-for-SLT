@@ -68,21 +68,6 @@ struct AccountView: View {
                         .font(.footnote)
                         .foregroundColor(.secondary.opacity(0.5))
                     
-                    Link(destination: URL(string: "https://prabch.com")!) {
-                        HStack(spacing: 6) {
-                            Image("favicon")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 16, height: 16)
-                                .cornerRadius(4)
-                            
-                            Text("prabch.com")
-                                .font(.footnote)
-                                .foregroundColor(.accentColor)
-                        }
-                    }
-                    .buttonStyle(.plain)
-                    
                     Text("This project is open source; you can view and audit the code on [GitHub](https://github.com/prabch/Usage-Meter-for-SLT).")
                         .font(.footnote)
                         .foregroundColor(.secondary)
@@ -99,6 +84,21 @@ struct AccountView: View {
                         .font(.caption2)
                         .foregroundColor(.secondary.opacity(0.5))
                         .padding(.top, 4)
+                    
+                    Link(destination: URL(string: "https://prabch.com")!) {
+                        HStack(spacing: 6) {
+                            Image("favicon")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 16, height: 16)
+                                .cornerRadius(4)
+                            
+                            Text("prabch.com")
+                                .font(.footnote)
+                                .foregroundColor(.accentColor)
+                        }
+                    }
+                    .buttonStyle(.plain)
                 }
                 .padding(.horizontal, 24)
                 .padding(.top, 24)
