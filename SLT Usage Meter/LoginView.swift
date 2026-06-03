@@ -12,6 +12,7 @@ import WidgetKit
 // Custom URLSession logic moved to NetworkManager
 
 struct LoginView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var accessToken: String = ""
@@ -19,6 +20,11 @@ struct LoginView: View {
     @State private var isLoading: Bool = false
     @State private var errorMessage: String = ""
     @State private var isPasswordVisible: Bool = false
+    
+    enum PasswordFieldType: Hashable {
+        case secure, plain
+    }
+    @FocusState private var focusedPasswordField: PasswordFieldType?
     
     let loginAction: (String) -> Void
     
@@ -31,39 +37,39 @@ struct LoginView: View {
         #endif
     }
 
-    private var instructionText: Text {
-        Text("Use the same email and password you use for the ")
+    private var instructionText: some View {
+        Text("Use the same email and password you use for the **[myslt.slt.lk](https://myslt.slt.lk)** portal")
             .font(.caption)
             .foregroundColor(.primary.opacity(0.7))
-        + Text("[myslt.slt.lk](https://myslt.slt.lk)")
-            .font(.caption)
-            .fontWeight(.semibold)
-            .foregroundColor(.blue)
-        + Text(" portal")
-            .font(.caption)
-            .foregroundColor(.primary.opacity(0.7))
+            .tint(.blue)
+            .fixedSize(horizontal: false, vertical: true)
     }
 
     var body: some View {
         ZStack {
             // Background gradient
-            LinearGradient(
-                gradient: Gradient(colors: [Color.blue.opacity(0.6), Color.purple.opacity(0.4)]),
-                startPoint: .topLeading,
-                endPoint: .bottomTrailing
-            )
-            .ignoresSafeArea()
+            ZStack {
+                if colorScheme == .dark {
+                    Color.black.ignoresSafeArea()
+                }
+                LinearGradient(
+                    gradient: Gradient(colors: colorScheme == .dark ? [Color.blue.opacity(0.4), Color.cyan.opacity(0.4)] : [.blue, .cyan]),
+                    startPoint: .topLeading,
+                    endPoint: .bottomTrailing
+                )
+                .ignoresSafeArea()
+            }
             
-            VStack(spacing: 0) {
+            GeometryReader { geometry in
                 ScrollView {
                     VStack(spacing: 0) {
-                        Spacer()
-                            .frame(height: 60)
+                        Spacer(minLength: 10)
+                            .frame(maxHeight: 60)
                         
                         // Logo/Title Section
                         VStack(spacing: 12) {
                             Image(systemName: "speedometer")
-                                .font(.system(size: 60))
+                                .font(.system(size: 40))
                                 .foregroundColor(.white)
                                 .padding(.bottom, 8)
                             
@@ -71,10 +77,13 @@ struct LoginView: View {
                                 .font(.system(size: 32, weight: .bold))
                                 .foregroundColor(.white)
                             
-                            Text("Monitor your SLT broadband usage")
+                            Text("Peep your SLT broadband usage directly from your home screen")
                                 .font(.subheadline)
                                 .foregroundColor(.white.opacity(0.9))
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
+                        .padding(.horizontal, 32)
                         .padding(.bottom, 40)
                         
                         // Login Card
@@ -124,30 +133,38 @@ struct LoginView: View {
                                     .foregroundColor(.primary)
                                 
                                 HStack {
-                                    if isPasswordVisible {
+                                    ZStack(alignment: .leading) {
                                         TextField("Enter your password", text: $password)
                                             .textFieldStyle(.plain)
                                             .disableAutocorrection(true)
                                             #if os(iOS)
                                             .autocapitalization(.none)
                                             #endif
+                                            .focused($focusedPasswordField, equals: .plain)
+                                            .frame(minHeight: 24)
+                                            .opacity(isPasswordVisible ? 1 : 0)
+                                            .allowsHitTesting(isPasswordVisible)
                                             .onSubmit {
-                                                if !email.isEmpty && !password.isEmpty {
-                                                    login()
-                                                }
+                                                if !email.isEmpty && !password.isEmpty { login() }
                                             }
-                                    } else {
+                                            
                                         SecureField("Enter your password", text: $password)
                                             .textFieldStyle(.plain)
+                                            .focused($focusedPasswordField, equals: .secure)
+                                            .frame(minHeight: 24)
+                                            .opacity(isPasswordVisible ? 0 : 1)
+                                            .allowsHitTesting(!isPasswordVisible)
                                             .onSubmit {
-                                                if !email.isEmpty && !password.isEmpty {
-                                                    login()
-                                                }
+                                                if !email.isEmpty && !password.isEmpty { login() }
                                             }
                                     }
                                     
                                     Button(action: {
+                                        let wasFocused = (focusedPasswordField != nil)
                                         isPasswordVisible.toggle()
+                                        if wasFocused {
+                                            focusedPasswordField = isPasswordVisible ? .plain : .secure
+                                        }
                                     }) {
                                         Image(systemName: isPasswordVisible ? "eye.slash" : "eye")
                                             .foregroundColor(.secondary)
@@ -200,24 +217,38 @@ struct LoginView: View {
                         .cornerRadius(20)
                         .shadow(color: Color.black.opacity(0.1), radius: 20, x: 0, y: 10)
                         .padding(.horizontal, 24)
-                        .padding(.bottom, 40)
+                        .padding(.bottom, 20)
+                        
+                        Spacer(minLength: 0)
+                        
+                        // Disclaimer at very bottom
+                        VStack(spacing: 4) {
+                            Text("Usage Meter for SLT is an independent app and is not affiliated with or endorsed by SLT Mobitel.")
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.8))
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 32)
+                            Text("No personal data is collected or stored externally")
+                                .font(.caption2)
+                                .foregroundColor(.white.opacity(0.8))
+                                .multilineTextAlignment(.center)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(.horizontal, 32)
+                        }
+                        .padding(.bottom, 20)
+                    }
+                    .frame(maxWidth: geometry.size.width)
+                    .frame(minHeight: geometry.size.height)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        #if canImport(UIKit)
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                        #endif
+                        focusedPasswordField = nil
                     }
                 }
-                
-                // Disclaimer at very bottom
-                VStack(spacing: 4) {
-                    Text("Usage Meter for SLT is an independent app and is not affiliated with or endorsed by SLT Mobitel.")
-                        .font(.caption2)
-                        .foregroundColor(.white.opacity(0.8))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                    Text("No personal data is collected or stored externally")
-                        .font(.caption2)
-                        .foregroundColor(.white.opacity(0.8))
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal)
-                }
-                .padding(.bottom, 20)
+                .adaptiveScrollBounce()
             }
         }
     }
@@ -264,3 +295,13 @@ struct LoginView_Previews: PreviewProvider {
     }
 }
 
+extension View {
+    @ViewBuilder
+    func adaptiveScrollBounce() -> some View {
+        if #available(iOS 16.4, macOS 13.3, *) {
+            self.scrollBounceBehavior(.basedOnSize)
+        } else {
+            self
+        }
+    }
+}

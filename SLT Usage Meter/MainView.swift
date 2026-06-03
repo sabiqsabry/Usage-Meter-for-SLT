@@ -80,7 +80,7 @@ struct MainView: View {
                     refreshAction: refreshData
                 )
                 .tabItem {
-                    Label("Usage", systemImage: "chart.bar.fill")
+                    Label("Usage", systemImage: "speedometer")
                 }
 
                 AccountView(
@@ -104,7 +104,7 @@ struct MainView: View {
                 refreshAction: refreshData
             )
             .tabItem {
-                Label("Usage", systemImage: "chart.bar.fill")
+                Label("Usage", systemImage: "speedometer")
             }
 
             AccountView(
