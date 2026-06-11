@@ -293,9 +293,17 @@ struct WidgetProgressBar: View {
                     .lineLimit(1)
                 Spacer()
                 if let limit = limit {
-                    Text("\(used) / \(limit) \(unit)")
-                        .font(.system(size: 9))
-                        .foregroundColor(.secondary)
+                    if invertProgressBar, let limitVal = Double(limit), let usedVal = Double(used) {
+                        let remaining = max(0, limitVal - usedVal)
+                        let remainingStr = String(format: "%.1f", remaining).replacingOccurrences(of: ".0", with: "")
+                        Text("\(remainingStr) / \(limit) \(unit)")
+                            .font(.system(size: 9))
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("\(used) / \(limit) \(unit)")
+                            .font(.system(size: 9))
+                            .foregroundColor(.secondary)
+                    }
                 } else {
                      Text("\(used) \(unit)")
                         .font(.system(size: 9))
