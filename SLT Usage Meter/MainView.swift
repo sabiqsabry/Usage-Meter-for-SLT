@@ -10,6 +10,7 @@ import SwiftUI
 struct MainView: View {
     let accessToken: String
     let logoutAction: () -> Void
+    @Binding var requestedAccountID: String?
     
     @State private var accounts: [AccountInfo] = []
     @State private var selectedAccount: AccountInfo?
@@ -18,6 +19,7 @@ struct MainView: View {
     @State private var vasBundles: [UsageDetail] = []
     @State private var isLoading = true
     @State private var errorMessage: String?
+    @State private var rawErrorResponse: String?
 
     var body: some View {
         Group {
@@ -35,6 +37,12 @@ struct MainView: View {
         }
         .onChange(of: selectedAccount) { _ in
             fetchDataForSelectedAccount()
+        }
+        .onChange(of: requestedAccountID) { newID in
+            if let newID = newID, let match = accounts.first(where: { $0.telephoneno == newID }) {
+                selectedAccount = match
+                requestedAccountID = nil // Reset after consuming
+            }
         }
     }
 
@@ -76,6 +84,7 @@ struct MainView: View {
                     vasBundles: vasBundles,
                     isLoading: isLoading,
                     errorMessage: errorMessage,
+                    rawErrorResponse: rawErrorResponse,
                     retryAction: fetchDataForSelectedAccount,
                     refreshAction: refreshData
                 )
@@ -100,6 +109,7 @@ struct MainView: View {
                 vasBundles: vasBundles,
                 isLoading: isLoading,
                 errorMessage: errorMessage,
+                rawErrorResponse: rawErrorResponse,
                 retryAction: fetchDataForSelectedAccount,
                 refreshAction: refreshData
             )
@@ -162,7 +172,10 @@ struct MainView: View {
                 let accs = try await NetworkManager.shared.fetchAccounts()
                 DispatchQueue.main.async {
                     self.accounts = accs
-                    if let first = accs.first {
+                    if let reqID = self.requestedAccountID, let match = accs.first(where: { $0.telephoneno == reqID }) {
+                        self.selectedAccount = match
+                        self.requestedAccountID = nil // Reset after consuming
+                    } else if let first = accs.first {
                         self.selectedAccount = first
                     } else {
                         self.errorMessage = "No accounts found."
@@ -183,6 +196,7 @@ struct MainView: View {
         
         isLoading = true
         errorMessage = nil
+        rawErrorResponse = nil
         
         let telephoneNo = account.telephoneno
         
@@ -191,6 +205,20 @@ struct MainView: View {
                 // Fetch Service Details
                 if let service = try await NetworkManager.shared.fetchServiceDetails(telephoneNo: telephoneNo) {
                      DispatchQueue.main.async { self.serviceDetail = service }
+                     
+                     let subscriberIDToUse = service.listofBBService.first?.serviceID ?? telephoneNo
+                     
+                     // Fetch Usage and VAS concurrently
+                     async let summary = NetworkManager.shared.fetchUsageSummary(subscriberID: subscriberIDToUse)
+                     async let bundles = NetworkManager.shared.fetchVASBundles(subscriberID: subscriberIDToUse)
+                     
+                     let (usageSummary, vasBundles) = try await (summary, bundles)
+                     
+                     DispatchQueue.main.async {
+                         self.usageSummary = usageSummary
+                         self.vasBundles = vasBundles
+                         self.isLoading = false
+                     }
                 } else {
                     // Handle case where service might be null but we proceed? 
                     // Or just log it. The original code errored out.
@@ -201,18 +229,14 @@ struct MainView: View {
                     return
                 }
                 
-                // Fetch Usage and VAS concurrently
-                async let summary = NetworkManager.shared.fetchUsageSummary(subscriberID: telephoneNo)
-                async let bundles = NetworkManager.shared.fetchVASBundles(subscriberID: telephoneNo)
-                
-                let (usageSummary, vasBundles) = try await (summary, bundles)
-                
-                DispatchQueue.main.async {
-                    self.usageSummary = usageSummary
-                    self.vasBundles = vasBundles
+            } catch let error as APIError {
+                 DispatchQueue.main.async {
+                    if case .decodingFailed(let message, let rawResponse) = error {
+                        self.errorMessage = message
+                        self.rawErrorResponse = rawResponse
+                    }
                     self.isLoading = false
                 }
-                
             } catch {
                  DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription
@@ -238,6 +262,9 @@ struct MainView: View {
 struct UsageProgressBar: View {
     let usage: UsageDetail
     
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
+    
     var remainingPercentage: Double {
         guard let limitStr = usage.limit, let limit = Double(limitStr), limit > 0 else { return 0 }
         guard let used = Double(usage.used) else { return 0 }
@@ -253,11 +280,11 @@ struct UsageProgressBar: View {
                 Spacer()
                 HStack(spacing: 4) {
                     if usage.limit != nil {
-                        Text("\(usage.used) / \(usage.limit ?? "0") \(usage.volumeUnit)")
+                        Text("\(usage.used.formattedVolume()) / \((usage.limit ?? "0").formattedVolume()) \(usage.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(usage.used) \(usage.volumeUnit)")
+                        Text("\(usage.used.formattedVolume()) \(usage.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("Unlimited")
@@ -279,9 +306,10 @@ struct UsageProgressBar: View {
                             .fill(Color.gray.opacity(0.1))
                             .frame(height: 8)
                         
+                        let progress = min(1.0, (Double(usage.used) ?? 0) / (Double(usage.limit ?? "1") ?? 1))
                         Capsule()
                             .fill(LinearGradient(gradient: Gradient(colors: [.blue, .cyan]), startPoint: .leading, endPoint: .trailing))
-                            .frame(width: geo.size.width * min(1.0, (Double(usage.used) ?? 0) / (Double(usage.limit ?? "1") ?? 1)), height: 8)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 8)
                     }
                 }
                 .frame(height: 8)
@@ -295,7 +323,7 @@ struct UsageProgressBar: View {
                 }
                 Spacer()
                 if let remaining = usage.remaining, usage.limit != nil {
-                    Text("Remaining: \(remaining) \(usage.volumeUnit)")
+                    Text("Remaining: \(remaining.formattedVolume()) \(usage.volumeUnit)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -368,19 +396,22 @@ struct UsageBreakdownView: View {
 struct BreakdownCard: View {
     let title: String
     let used: String
-    let limit: String
+    let limit: String?
     let unit: String
     let icon: String
     let color: Color
     
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
+    
     var remainingPercentage: Double {
-        guard let limitVal = Double(limit), limitVal > 0 else { return 0 }
+        guard let limitStr = limit, let limitVal = Double(limitStr), limitVal > 0 else { return 0 }
         guard let usedVal = Double(used) else { return 0 }
         return max(0, 100 - (usedVal / limitVal) * 100)
     }
     
     var remaining: Double {
-        guard let limitVal = Double(limit), let usedVal = Double(used) else { return 0 }
+        guard let limitStr = limit, let limitVal = Double(limitStr), let usedVal = Double(used) else { return 0 }
         return max(0, limitVal - usedVal)
     }
     
@@ -396,33 +427,52 @@ struct BreakdownCard: View {
                         .fontWeight(.semibold)
                 }
                 Spacer()
-                Text("\(used) / \(limit) \(unit)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-            }
-            
-            GeometryReader { geo in
-                ZStack(alignment: .leading) {
-                    Capsule()
-                        .fill(Color.gray.opacity(0.1))
-                        .frame(height: 6)
-                    
-                    Capsule()
-                        .fill(color)
-                        .frame(width: geo.size.width * min(1.0, (Double(used) ?? 0) / (Double(limit) ?? 1)), height: 6)
+                HStack(spacing: 4) {
+                    if let limitStr = limit {
+                        Text("\(used.formattedVolume()) / \(limitStr.formattedVolume()) \(unit)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                    } else {
+                        Text("\(used.formattedVolume()) \(unit)")
+                            .font(.caption2)
+                            .foregroundColor(.secondary)
+                        Text("Unlimited")
+                            .font(.system(size: 9))
+                            .fontWeight(.semibold)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(color.opacity(0.15))
+                            .foregroundColor(color)
+                            .cornerRadius(4)
+                    }
                 }
             }
-            .frame(height: 6)
             
-            HStack {
-                Spacer()
-                Text("Remaining: \(String(format: "%.1f", remaining)) \(unit)")
-                    .font(.caption2)
-                    .foregroundColor(.secondary)
-                Text(String(format: "%.0f%%", remainingPercentage))
-                    .font(.caption2)
-                    .fontWeight(.semibold)
-                    .foregroundColor(color)
+            if limit != nil {
+                GeometryReader { geo in
+                    ZStack(alignment: .leading) {
+                        Capsule()
+                            .fill(Color.gray.opacity(0.1))
+                            .frame(height: 6)
+                        
+                        let progress = min(1.0, (Double(used) ?? 0) / (Double(limit ?? "1") ?? 1))
+                        Capsule()
+                            .fill(color)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 6)
+                    }
+                }
+                .frame(height: 6)
+                
+                HStack {
+                    Spacer()
+                    Text("Remaining: \(String(format: "%.1f", remaining).formattedVolume()) \(unit)")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Text(String(format: "%.0f%%", remainingPercentage))
+                        .font(.caption2)
+                        .fontWeight(.semibold)
+                        .foregroundColor(color)
+                }
             }
         }
         .padding()
@@ -433,6 +483,9 @@ struct BreakdownCard: View {
 
 struct VASBundleRow: View {
     let bundle: UsageDetail
+    
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
     
     var remainingPercentage: Double {
         guard let limitStr = bundle.limit, let limit = Double(limitStr), limit > 0 else { return 0 }
@@ -449,11 +502,11 @@ struct VASBundleRow: View {
                 Spacer()
                 HStack(spacing: 4) {
                     if bundle.limit != nil {
-                        Text("\(bundle.used) / \(bundle.limit ?? "0") \(bundle.volumeUnit)")
+                        Text("\(bundle.used.formattedVolume()) / \((bundle.limit ?? "0").formattedVolume()) \(bundle.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(bundle.used) \(bundle.volumeUnit)")
+                        Text("\(bundle.used.formattedVolume()) \(bundle.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("Unlimited")
@@ -475,9 +528,10 @@ struct VASBundleRow: View {
                             .fill(Color.gray.opacity(0.1))
                             .frame(height: 8)
                         
+                        let progress = min(1.0, (Double(bundle.used) ?? 0) / (Double(bundle.limit ?? "1") ?? 1))
                         Capsule()
                             .fill(LinearGradient(gradient: Gradient(colors: [.blue, .cyan]), startPoint: .leading, endPoint: .trailing))
-                            .frame(width: geo.size.width * min(1.0, (Double(bundle.used) ?? 0) / (Double(bundle.limit ?? "1") ?? 1)), height: 8)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 8)
                     }
                 }
                 .frame(height: 8)
@@ -491,7 +545,7 @@ struct VASBundleRow: View {
                 }
                 Spacer()
                 if let remaining = bundle.remaining, bundle.limit != nil {
-                    Text("Remaining: \(remaining) \(bundle.volumeUnit)")
+                    Text("Remaining: \(remaining.formattedVolume()) \(bundle.volumeUnit)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -553,7 +607,7 @@ struct InfoRow: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(accessToken: "sampleAccessToken", logoutAction: {})
+        MainView(accessToken: "sampleAccessToken", logoutAction: {}, requestedAccountID: .constant(nil))
     }
 }
 
