@@ -50,7 +50,7 @@ struct AccountView: View {
                         Divider()
                             .padding(.leading)
                         
-                        Toggle("Invert Progress Bar", isOn: $invertProgressBar)
+                        Toggle("Invert Progress Bars", isOn: $invertProgressBar)
                             .padding()
                     }
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
