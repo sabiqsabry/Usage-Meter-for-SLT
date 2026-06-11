@@ -205,6 +205,20 @@ struct MainView: View {
                 // Fetch Service Details
                 if let service = try await NetworkManager.shared.fetchServiceDetails(telephoneNo: telephoneNo) {
                      DispatchQueue.main.async { self.serviceDetail = service }
+                     
+                     let subscriberIDToUse = service.listofBBService.first?.serviceID ?? telephoneNo
+                     
+                     // Fetch Usage and VAS concurrently
+                     async let summary = NetworkManager.shared.fetchUsageSummary(subscriberID: subscriberIDToUse)
+                     async let bundles = NetworkManager.shared.fetchVASBundles(subscriberID: subscriberIDToUse)
+                     
+                     let (usageSummary, vasBundles) = try await (summary, bundles)
+                     
+                     DispatchQueue.main.async {
+                         self.usageSummary = usageSummary
+                         self.vasBundles = vasBundles
+                         self.isLoading = false
+                     }
                 } else {
                     // Handle case where service might be null but we proceed? 
                     // Or just log it. The original code errored out.
@@ -213,18 +227,6 @@ struct MainView: View {
                         self.isLoading = false
                     }
                     return
-                }
-                
-                // Fetch Usage and VAS concurrently
-                async let summary = NetworkManager.shared.fetchUsageSummary(subscriberID: telephoneNo)
-                async let bundles = NetworkManager.shared.fetchVASBundles(subscriberID: telephoneNo)
-                
-                let (usageSummary, vasBundles) = try await (summary, bundles)
-                
-                DispatchQueue.main.async {
-                    self.usageSummary = usageSummary
-                    self.vasBundles = vasBundles
-                    self.isLoading = false
                 }
                 
             } catch let error as APIError {

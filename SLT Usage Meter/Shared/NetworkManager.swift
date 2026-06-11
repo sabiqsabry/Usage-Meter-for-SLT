@@ -151,6 +151,12 @@ class NetworkManager {
     private func convertToInternationalFormat(_ phoneNumber: String) -> String {
         let cleaned = phoneNumber.replacingOccurrences(of: " ", with: "")
                                  .replacingOccurrences(of: "-", with: "")
+        
+        let letters = CharacterSet.letters
+        if cleaned.rangeOfCharacter(from: letters) != nil {
+            return cleaned
+        }
+        
         if cleaned.hasPrefix("0") {
             return "94" + cleaned.dropFirst()
         }
