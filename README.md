@@ -14,7 +14,7 @@ I got tired of logging into the portal just to check my remaining data. We all k
 * View multiple connections registered under a single MySLT account
 * Your MySLT credentials are exchanged for a secure token, which is safely stored on your device (via Keychain)
 * Logging in on one device signs you in across all devices using your Apple ID
-* Currently supports SLT Fibre connections only
+* Supports SLT Fibre, Unlimited Fibre, and ADSL connections
 
 ## Screenshots
 
