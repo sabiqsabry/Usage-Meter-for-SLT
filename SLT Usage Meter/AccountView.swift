@@ -44,14 +44,26 @@ struct AccountView: View {
                         .padding(.horizontal)
                     
                     VStack(spacing: 0) {
-                        Toggle("Hide Phone Number", isOn: $hidePhoneNumberInWidget)
-                            .padding()
+                        HStack {
+                            Text("Hide Phone Number")
+                            Spacer()
+                            Toggle("Hide Phone Number", isOn: $hidePhoneNumberInWidget)
+                                .labelsHidden()
+                                .toggleStyle(.switch)
+                        }
+                        .padding()
                         
                         Divider()
                             .padding(.leading)
                         
-                        Toggle("Invert Progress Bars", isOn: $invertProgressBar)
-                            .padding()
+                        HStack {
+                            Text("Invert Progress Bars")
+                            Spacer()
+                            Toggle("Invert Progress Bars", isOn: $invertProgressBar)
+                                .labelsHidden()
+                                .toggleStyle(.switch)
+                        }
+                        .padding()
                     }
                     .background(RoundedRectangle(cornerRadius: 12).fill(Color.primary.opacity(0.05)))
                     .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.gray.opacity(0.1), lineWidth: 1))
