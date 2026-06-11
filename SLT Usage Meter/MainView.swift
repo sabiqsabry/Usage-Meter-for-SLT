@@ -238,6 +238,9 @@ struct MainView: View {
 struct UsageProgressBar: View {
     let usage: UsageDetail
     
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
+    
     var remainingPercentage: Double {
         guard let limitStr = usage.limit, let limit = Double(limitStr), limit > 0 else { return 0 }
         guard let used = Double(usage.used) else { return 0 }
@@ -279,9 +282,10 @@ struct UsageProgressBar: View {
                             .fill(Color.gray.opacity(0.1))
                             .frame(height: 8)
                         
+                        let progress = min(1.0, (Double(usage.used) ?? 0) / (Double(usage.limit ?? "1") ?? 1))
                         Capsule()
                             .fill(LinearGradient(gradient: Gradient(colors: [.blue, .cyan]), startPoint: .leading, endPoint: .trailing))
-                            .frame(width: geo.size.width * min(1.0, (Double(usage.used) ?? 0) / (Double(usage.limit ?? "1") ?? 1)), height: 8)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 8)
                     }
                 }
                 .frame(height: 8)
@@ -373,6 +377,9 @@ struct BreakdownCard: View {
     let icon: String
     let color: Color
     
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
+    
     var remainingPercentage: Double {
         guard let limitVal = Double(limit), limitVal > 0 else { return 0 }
         guard let usedVal = Double(used) else { return 0 }
@@ -407,9 +414,10 @@ struct BreakdownCard: View {
                         .fill(Color.gray.opacity(0.1))
                         .frame(height: 6)
                     
+                    let progress = min(1.0, (Double(used) ?? 0) / (Double(limit) ?? 1))
                     Capsule()
                         .fill(color)
-                        .frame(width: geo.size.width * min(1.0, (Double(used) ?? 0) / (Double(limit) ?? 1)), height: 6)
+                        .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 6)
                 }
             }
             .frame(height: 6)
@@ -433,6 +441,9 @@ struct BreakdownCard: View {
 
 struct VASBundleRow: View {
     let bundle: UsageDetail
+    
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
     
     var remainingPercentage: Double {
         guard let limitStr = bundle.limit, let limit = Double(limitStr), limit > 0 else { return 0 }
@@ -475,9 +486,10 @@ struct VASBundleRow: View {
                             .fill(Color.gray.opacity(0.1))
                             .frame(height: 8)
                         
+                        let progress = min(1.0, (Double(bundle.used) ?? 0) / (Double(bundle.limit ?? "1") ?? 1))
                         Capsule()
                             .fill(LinearGradient(gradient: Gradient(colors: [.blue, .cyan]), startPoint: .leading, endPoint: .trailing))
-                            .frame(width: geo.size.width * min(1.0, (Double(bundle.used) ?? 0) / (Double(bundle.limit ?? "1") ?? 1)), height: 8)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress), height: 8)
                     }
                 }
                 .frame(height: 8)

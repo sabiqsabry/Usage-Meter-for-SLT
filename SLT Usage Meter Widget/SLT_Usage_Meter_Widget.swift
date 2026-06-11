@@ -168,11 +168,14 @@ struct UsageView: View {
     let entry: SimpleEntry
     let subscriberID: String
     
+    @AppStorage("hidePhoneNumberInWidget", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var hidePhoneNumberInWidget: Bool = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             // Header
             HStack {
-                Text(subscriberID)
+                Text(hidePhoneNumberInWidget ? "Usage Meter for SLT" : subscriberID)
                     .font(.caption)
                     .fontWeight(.bold)
                     .foregroundColor(.secondary)
@@ -241,6 +244,9 @@ struct WidgetProgressBar: View {
     let unit: String
     let color: Color
     
+    @AppStorage("invertProgressBar", store: UserDefaults(suiteName: "group.com.prabch.sltusage"))
+    private var invertProgressBar: Bool = false
+    
     var progress: Double {
         guard let limitStr = limit, let limitVal = Double(limitStr), limitVal > 0, let usedVal = Double(used) else { return 0 }
         return min(1.0, usedVal / limitVal)
@@ -272,7 +278,7 @@ struct WidgetProgressBar: View {
                     if limit != nil {
                         Capsule()
                             .fill(color)
-                            .frame(width: geo.size.width * progress)
+                            .frame(width: geo.size.width * (invertProgressBar ? (1.0 - progress) : progress))
                     } else {
                          Capsule()
                             .fill(color.opacity(0.5))
