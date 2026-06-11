@@ -194,30 +194,50 @@ struct UsageView: View {
             
             // Usage Bars
             if let summary = entry.usageSummary {
-                // Main Package
-                if let packageInfo = summary.myPackageInfo {
-                    ForEach(packageInfo.usageDetails.prefix(2)) { usage in
-                        WidgetProgressBar(name: usage.name, used: usage.used, limit: usage.limit, unit: usage.volumeUnit, color: .blue)
+                let hasNoAddons = summary.bonusDataSummary == nil && summary.extraGbDataSummary == nil && entry.vasBundles.isEmpty
+                let mainUsage = summary.myPackageInfo?.usageDetails.first
+                
+                if hasNoAddons, let usage = mainUsage, usage.limit == nil {
+                    Spacer()
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(usage.name)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundColor(.secondary)
+                        HStack(alignment: .firstTextBaseline, spacing: 2) {
+                            Text(usage.used)
+                                .font(.system(size: 34, weight: .bold, design: .rounded))
+                                .foregroundColor(.primary)
+                            Text(usage.volumeUnit)
+                                .font(.system(size: 14, weight: .semibold, design: .rounded))
+                                .foregroundColor(.secondary)
+                        }
                     }
-                }
-                
-                // Data Packs
-                if let bonus = summary.bonusDataSummary {
-                    WidgetProgressBar(name: "Bonus Data", used: bonus.used, limit: bonus.limit, unit: bonus.volumeUnit, color: .purple)
-                }
-                if let extra = summary.extraGbDataSummary {
-                    WidgetProgressBar(name: "Extra GB", used: extra.used, limit: extra.limit, unit: extra.volumeUnit, color: .orange)
-                 }
-                
-                // VAS Bundles
-                ForEach(entry.vasBundles.prefix(3)) { bundle in
-                    WidgetProgressBar(name: bundle.name, used: bundle.used, limit: bundle.limit, unit: bundle.volumeUnit, color: .green)
-                }
-                
-                if entry.vasBundles.isEmpty && summary.myPackageInfo == nil && summary.bonusDataSummary == nil && summary.extraGbDataSummary == nil {
-                     Text("No usage info")
-                         .font(.caption)
-                         .foregroundColor(.secondary)
+                } else {
+                    // Main Package
+                    if let packageInfo = summary.myPackageInfo {
+                        ForEach(packageInfo.usageDetails.prefix(2)) { usage in
+                            WidgetProgressBar(name: usage.name, used: usage.used, limit: usage.limit, unit: usage.volumeUnit, color: .blue)
+                        }
+                    }
+                    
+                    // Data Packs
+                    if let bonus = summary.bonusDataSummary {
+                        WidgetProgressBar(name: "Bonus Data", used: bonus.used, limit: bonus.limit, unit: bonus.volumeUnit, color: .purple)
+                    }
+                    if let extra = summary.extraGbDataSummary {
+                        WidgetProgressBar(name: "Extra GB", used: extra.used, limit: extra.limit, unit: extra.volumeUnit, color: .orange)
+                     }
+                    
+                    // VAS Bundles
+                    ForEach(entry.vasBundles.prefix(3)) { bundle in
+                        WidgetProgressBar(name: bundle.name, used: bundle.used, limit: bundle.limit, unit: bundle.volumeUnit, color: .green)
+                    }
+                    
+                    if entry.vasBundles.isEmpty && summary.myPackageInfo == nil && summary.bonusDataSummary == nil && summary.extraGbDataSummary == nil {
+                         Text("No usage info")
+                             .font(.caption)
+                             .foregroundColor(.secondary)
+                    }
                 }
                 
             } else {
