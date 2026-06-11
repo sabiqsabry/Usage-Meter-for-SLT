@@ -8,6 +8,16 @@
 import Foundation
 import SwiftUI
 
+extension String {
+    func removingTrailingPeriod() -> String {
+        var cleaned = self.trimmingCharacters(in: .whitespaces)
+        if cleaned.hasSuffix(".") {
+            cleaned = String(cleaned.dropLast()).trimmingCharacters(in: .whitespaces)
+        }
+        return cleaned
+    }
+}
+
 // MARK: - Auth Response
 struct LoginResponse: Decodable {
     let accessToken: String
@@ -146,8 +156,28 @@ struct PackageSummary: Codable, Equatable {
     }
 }
 
+@propertyWrapper
+struct SanitizedString: Codable, Equatable {
+    var wrappedValue: String
+
+    init(wrappedValue: String) {
+        self.wrappedValue = wrappedValue.removingTrailingPeriod()
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        self.wrappedValue = rawValue.removingTrailingPeriod()
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(wrappedValue)
+    }
+}
+
 struct PackageInfo: Codable, Equatable {
-    let packageName: String
+    @SanitizedString var packageName: String
     let usageDetails: [UsageDetail]
     
     enum CodingKeys: String, CodingKey {
@@ -180,7 +210,7 @@ struct DataBundle: Codable {
 
 struct UsageDetail: Codable, Identifiable, Equatable {
     let id = UUID()
-    let name: String
+    @SanitizedString var name: String
     let limit: String?
     let remaining: String?
     let used: String
