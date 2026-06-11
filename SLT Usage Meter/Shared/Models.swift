@@ -16,6 +16,13 @@ extension String {
         }
         return cleaned
     }
+    
+    func formattedVolume() -> String {
+        if self.hasSuffix(".0") {
+            return String(self.dropLast(2))
+        }
+        return self
+    }
 }
 
 // MARK: - Auth Response

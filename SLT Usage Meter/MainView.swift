@@ -280,11 +280,11 @@ struct UsageProgressBar: View {
                 Spacer()
                 HStack(spacing: 4) {
                     if usage.limit != nil {
-                        Text("\(usage.used) / \(usage.limit ?? "0") \(usage.volumeUnit)")
+                        Text("\(usage.used.formattedVolume()) / \((usage.limit ?? "0").formattedVolume()) \(usage.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(usage.used) \(usage.volumeUnit)")
+                        Text("\(usage.used.formattedVolume()) \(usage.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("Unlimited")
@@ -323,7 +323,7 @@ struct UsageProgressBar: View {
                 }
                 Spacer()
                 if let remaining = usage.remaining, usage.limit != nil {
-                    Text("Remaining: \(remaining) \(usage.volumeUnit)")
+                    Text("Remaining: \(remaining.formattedVolume()) \(usage.volumeUnit)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -429,11 +429,11 @@ struct BreakdownCard: View {
                 Spacer()
                 HStack(spacing: 4) {
                     if let limitStr = limit {
-                        Text("\(used) / \(limitStr) \(unit)")
+                        Text("\(used.formattedVolume()) / \(limitStr.formattedVolume()) \(unit)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(used) \(unit)")
+                        Text("\(used.formattedVolume()) \(unit)")
                             .font(.caption2)
                             .foregroundColor(.secondary)
                         Text("Unlimited")
@@ -465,7 +465,7 @@ struct BreakdownCard: View {
                 
                 HStack {
                     Spacer()
-                    Text("Remaining: \(String(format: "%.1f", remaining)) \(unit)")
+                    Text("Remaining: \(String(format: "%.1f", remaining).formattedVolume()) \(unit)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Text(String(format: "%.0f%%", remainingPercentage))
@@ -502,11 +502,11 @@ struct VASBundleRow: View {
                 Spacer()
                 HStack(spacing: 4) {
                     if bundle.limit != nil {
-                        Text("\(bundle.used) / \(bundle.limit ?? "0") \(bundle.volumeUnit)")
+                        Text("\(bundle.used.formattedVolume()) / \((bundle.limit ?? "0").formattedVolume()) \(bundle.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                     } else {
-                        Text("\(bundle.used) \(bundle.volumeUnit)")
+                        Text("\(bundle.used.formattedVolume()) \(bundle.volumeUnit)")
                             .font(.caption)
                             .foregroundColor(.secondary)
                         Text("Unlimited")
@@ -545,7 +545,7 @@ struct VASBundleRow: View {
                 }
                 Spacer()
                 if let remaining = bundle.remaining, bundle.limit != nil {
-                    Text("Remaining: \(remaining) \(bundle.volumeUnit)")
+                    Text("Remaining: \(remaining.formattedVolume()) \(bundle.volumeUnit)")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
