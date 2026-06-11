@@ -19,6 +19,7 @@ struct MainView: View {
     @State private var vasBundles: [UsageDetail] = []
     @State private var isLoading = true
     @State private var errorMessage: String?
+    @State private var rawErrorResponse: String?
 
     var body: some View {
         Group {
@@ -83,6 +84,7 @@ struct MainView: View {
                     vasBundles: vasBundles,
                     isLoading: isLoading,
                     errorMessage: errorMessage,
+                    rawErrorResponse: rawErrorResponse,
                     retryAction: fetchDataForSelectedAccount,
                     refreshAction: refreshData
                 )
@@ -107,6 +109,7 @@ struct MainView: View {
                 vasBundles: vasBundles,
                 isLoading: isLoading,
                 errorMessage: errorMessage,
+                rawErrorResponse: rawErrorResponse,
                 retryAction: fetchDataForSelectedAccount,
                 refreshAction: refreshData
             )
@@ -193,6 +196,7 @@ struct MainView: View {
         
         isLoading = true
         errorMessage = nil
+        rawErrorResponse = nil
         
         let telephoneNo = account.telephoneno
         
@@ -223,6 +227,14 @@ struct MainView: View {
                     self.isLoading = false
                 }
                 
+            } catch let error as APIError {
+                 DispatchQueue.main.async {
+                    if case .decodingFailed(let message, let rawResponse) = error {
+                        self.errorMessage = message
+                        self.rawErrorResponse = rawResponse
+                    }
+                    self.isLoading = false
+                }
             } catch {
                  DispatchQueue.main.async {
                     self.errorMessage = error.localizedDescription

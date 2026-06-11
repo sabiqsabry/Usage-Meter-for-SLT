@@ -28,6 +28,7 @@
 		339535FB2F0C4D7100DF1AC2 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F52F0C4D7100DF1AC2 /* Models.swift */; };
 		339535FC2F0C4D7100DF1AC2 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F42F0C4D7100DF1AC2 /* Constants.swift */; };
 		339535FD2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */; };
+		33CC248B2FDB4F5F001BB188 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33CC248A2FDB4F5F001BB188 /* MailView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		339535F42F0C4D7100DF1AC2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		339535F52F0C4D7100DF1AC2 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		339535F62F0C4D7100DF1AC2 /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		33CC248A2FDB4F5F001BB188 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -181,6 +183,7 @@
 		339535F72F0C4D7100DF1AC2 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				33CC248A2FDB4F5F001BB188 /* MailView.swift */,
 				3368CB932F1CE1B700F26990 /* Secrets.example.swift */,
 				3368CB8D2F1CE17200F26990 /* Secrets.swift */,
 				339535F42F0C4D7100DF1AC2 /* Constants.swift */,
@@ -307,6 +310,7 @@
 				339535FC2F0C4D7100DF1AC2 /* Constants.swift in Sources */,
 				339535FD2F0C4D7100DF1AC2 /* NetworkManager.swift in Sources */,
 				335B8A8A2C312677002CC442 /* LoginView.swift in Sources */,
+				33CC248B2FDB4F5F001BB188 /* MailView.swift in Sources */,
 				335B8A762C312530002CC442 /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
