@@ -10,6 +10,7 @@ import SwiftUI
 struct MainView: View {
     let accessToken: String
     let logoutAction: () -> Void
+    @Binding var requestedAccountID: String?
     
     @State private var accounts: [AccountInfo] = []
     @State private var selectedAccount: AccountInfo?
@@ -35,6 +36,12 @@ struct MainView: View {
         }
         .onChange(of: selectedAccount) { _ in
             fetchDataForSelectedAccount()
+        }
+        .onChange(of: requestedAccountID) { newID in
+            if let newID = newID, let match = accounts.first(where: { $0.telephoneno == newID }) {
+                selectedAccount = match
+                requestedAccountID = nil // Reset after consuming
+            }
         }
     }
 
@@ -162,7 +169,10 @@ struct MainView: View {
                 let accs = try await NetworkManager.shared.fetchAccounts()
                 DispatchQueue.main.async {
                     self.accounts = accs
-                    if let first = accs.first {
+                    if let reqID = self.requestedAccountID, let match = accs.first(where: { $0.telephoneno == reqID }) {
+                        self.selectedAccount = match
+                        self.requestedAccountID = nil // Reset after consuming
+                    } else if let first = accs.first {
                         self.selectedAccount = first
                     } else {
                         self.errorMessage = "No accounts found."
@@ -565,7 +575,7 @@ struct InfoRow: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(accessToken: "sampleAccessToken", logoutAction: {})
+        MainView(accessToken: "sampleAccessToken", logoutAction: {}, requestedAccountID: .constant(nil))
     }
 }
 

@@ -139,6 +139,7 @@ struct SLT_Usage_Meter_WidgetEntryView : View {
                 LoginPromptView()
             } else if let subID = entry.subscriberID {
                  UsageView(entry: entry, subscriberID: subID)
+                    .widgetURL(URL(string: "sltusage://account/\(subID)"))
             } else {
                 Text("No accounts found")
                     .font(.caption)
