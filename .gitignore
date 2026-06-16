@@ -27,3 +27,23 @@ Pods/
 
 # Secrets
 Secrets.swift
+
+# Flutter
+flutter_app/.dart_tool/
+flutter_app/.flutter-plugins
+flutter_app/.flutter-plugins-dependencies
+flutter_app/build/
+flutter_app/.packages
+flutter_app/pubspec.lock
+flutter_app/android/.gradle/
+flutter_app/android/local.properties
+flutter_app/android/key.properties
+flutter_app/ios/Pods/
+flutter_app/ios/.symlinks/
+flutter_app/ios/Flutter/flutter_export_environment.sh
+flutter_app/macos/Pods/
+flutter_app/macos/.symlinks/
+flutter_app/web/
+flutter_app/linux/flutter/
+flutter_app/windows/flutter/
+flutter_app/lib/core/constants/secrets.dart
