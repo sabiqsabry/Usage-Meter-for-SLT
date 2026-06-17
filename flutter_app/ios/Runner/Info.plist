@@ -54,6 +54,21 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<!-- Google Sign-In URL scheme — replace REVERSED_IOS_CLIENT_ID with the
+	     reversed form of kGoogleIosClientId, e.g. if your client ID is
+	     "123-abc.apps.googleusercontent.com" the reversed form is
+	     "com.googleusercontent.apps.123-abc" -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>REVERSED_IOS_CLIENT_ID</string>
+			</array>
+		</dict>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

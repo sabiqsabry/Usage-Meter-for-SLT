@@ -45,6 +45,44 @@ class ApiClient {
     return '94$cleaned';
   }
 
+  /// Sign in via an external provider (e.g. Google).
+  /// [idToken] is the Google ID token returned by google_sign_in.
+  /// [email] is the user's email, saved locally for future API calls.
+  Future<Map<String, dynamic>> loginExternal({
+    required String idToken,
+    required String email,
+  }) async {
+    final body = 'provider=Google'
+        '&externalAccessToken=${_percentEncode(idToken)}'
+        '&externalAccessToken2='
+        '&firebaseId=123123123'
+        '&appVersion=1'
+        '&osType=iOS'
+        '&channelID=WEB';
+
+    final response = await _client
+        .post(
+          Uri.parse(ApiEndpoints.loginExternal),
+          headers: _baseHeaders(urlEncoded: true),
+          body: body,
+        )
+        .timeout(_timeout);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      await _storage.saveAccessToken(data['accessToken'] as String);
+      await _storage.saveRefreshToken(data['refreshToken'] as String);
+      await _storage.saveUsername(email);
+      return data;
+    }
+
+    throw ApiException(
+      'Google login failed (${response.statusCode})',
+      statusCode: response.statusCode,
+      rawResponse: response.body,
+    );
+  }
+
   Future<Map<String, dynamic>> login(String username, String password) async {
     final body = 'username=${_percentEncode(username)}'
         '&password=${_percentEncode(password)}'

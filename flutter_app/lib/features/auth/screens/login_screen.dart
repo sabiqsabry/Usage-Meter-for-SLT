@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
-import 'webview_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -267,26 +266,33 @@ class _LoginScreenState extends State<LoginScreen> {
 
             const SizedBox(height: 16),
 
-            // Sign in via MySLT Portal (supports Google Sign-In)
-            OutlinedButton.icon(
-              onPressed: _openPortalLogin,
-              icon: const Icon(Icons.open_in_browser_rounded),
-              label: const Text('Continue with MySLT Portal'),
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size.fromHeight(50),
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12)),
+            // Google Sign-In button
+            Consumer<AuthProvider>(
+              builder: (_, auth, __) => OutlinedButton(
+                onPressed: auth.isLoading ? null : _signInWithGoogle,
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Google "G" logo
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: const BoxDecoration(shape: BoxShape.circle),
+                      child: const _GoogleLogo(),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Continue with Google',
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                  ],
+                ),
               ),
-            ),
-
-            const SizedBox(height: 8),
-
-            Text(
-              'Supports Google Sign-In and all other methods available on myslt.slt.lk',
-              style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
-              textAlign: TextAlign.center,
             ),
           ],
         ),
@@ -294,16 +300,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  void _openPortalLogin() {
-    Navigator.of(context).push(MaterialPageRoute(
-      builder: (_) => WebViewLoginScreen(
-        onLoginSuccess: (accessToken, refreshToken, username) {
-          Navigator.of(context).pop();
-          // Mark as authenticated in the provider without re-calling the API.
-          context.read<AuthProvider>().markAuthenticated();
-        },
-      ),
-    ));
+  Future<void> _signInWithGoogle() async {
+    await context.read<AuthProvider>().signInWithGoogle();
   }
 
   Widget _buildDisclaimer(BuildContext context) {
@@ -327,4 +325,61 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
+}
+
+/// Renders the Google "G" multicolour logo using a CustomPainter so we don't
+/// need an external image asset.
+class _GoogleLogo extends StatelessWidget {
+  const _GoogleLogo();
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      painter: _GoogleLogoPainter(),
+      size: const Size(20, 20),
+    );
+  }
+}
+
+class _GoogleLogoPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()..style = PaintingStyle.fill;
+    final center = Offset(size.width / 2, size.height / 2);
+    final r = size.width / 2;
+
+    // Blue arc (right)
+    paint.color = const Color(0xFF4285F4);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: r),
+        -0.52, 3.14, true, paint);
+
+    // Green arc (bottom-right)
+    paint.color = const Color(0xFF34A853);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: r),
+        0.52, 1.05, true, paint);
+
+    // Yellow arc (bottom-left)
+    paint.color = const Color(0xFFFBBC05);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: r),
+        2.09, 1.05, true, paint);
+
+    // Red arc (top-left)
+    paint.color = const Color(0xFFEA4335);
+    canvas.drawArc(Rect.fromCircle(center: center, radius: r),
+        3.14, 1.05, true, paint);
+
+    // White centre cutout
+    paint.color = Colors.white;
+    canvas.drawCircle(center, r * 0.6, paint);
+
+    // Blue "G" bar
+    paint.color = const Color(0xFF4285F4);
+    canvas.drawRect(
+      Rect.fromLTWH(center.dx, center.dy - r * 0.18, r, r * 0.36),
+      paint,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
