@@ -70,14 +70,39 @@ class ApiClient {
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
-      await _storage.saveAccessToken(data['accessToken'] as String);
-      await _storage.saveRefreshToken(data['refreshToken'] as String);
+
+      // Log the full response so we can see the exact field names MySLT uses.
+      // ignore: avoid_print
+      print('[LoginExternal] keys=${data.keys.toList()} body=${response.body}');
+
+      // MySLT may use different casing or nesting — try common variations.
+      final accessToken = (data['accessToken']
+              ?? data['access_token']
+              ?? data['token']
+              ?? data['AccessToken']) as String?;
+
+      final refreshToken = (data['refreshToken']
+              ?? data['refresh_token']
+              ?? data['RefreshToken']) as String?;
+
+      if (accessToken == null || accessToken.isEmpty) {
+        throw ApiException(
+          'Google login succeeded but no access token was returned.\n'
+          'Response: ${response.body}',
+          rawResponse: response.body,
+        );
+      }
+
+      await _storage.saveAccessToken(accessToken);
+      if (refreshToken != null && refreshToken.isNotEmpty) {
+        await _storage.saveRefreshToken(refreshToken);
+      }
       await _storage.saveUsername(email);
       return data;
     }
 
     throw ApiException(
-      'Google login failed (${response.statusCode})',
+      'Google login failed (${response.statusCode}): ${response.body}',
       statusCode: response.statusCode,
       rawResponse: response.body,
     );
