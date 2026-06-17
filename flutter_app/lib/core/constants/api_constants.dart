@@ -7,7 +7,8 @@ const String kMySltGoogleClientId =
 
 // Your iOS OAuth client ID from Google Cloud Console.
 // Replace with the value from console.cloud.google.com → Credentials → iOS client.
-const String kGoogleIosClientId = 'YOUR_IOS_CLIENT_ID.apps.googleusercontent.com';
+const String kGoogleIosClientId =
+    '977775449797-henat6gb5l84sfo6ajt240kprm17eb0t.apps.googleusercontent.com';
 
 // Replace with your actual IBM Client ID
 // Obtain from the SLT developer portal or from the original app's Secrets.swift
