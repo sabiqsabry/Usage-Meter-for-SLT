@@ -12,7 +12,16 @@ class UsageScreen extends StatelessWidget {
     return Consumer<UsageProvider>(
       builder: (context, provider, _) {
         if (provider.isLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text('Fetching usage data…'),
+              ],
+            ),
+          );
         }
 
         if (provider.errorMessage != null) {
@@ -22,75 +31,112 @@ class UsageScreen extends StatelessWidget {
           );
         }
 
+        final summary = provider.usageSummary;
+
         return RefreshIndicator(
           onRefresh: provider.refresh,
           child: CustomScrollView(
             slivers: [
-              // Status card
-              if (provider.usageSummary != null)
+              // ── Status card ──────────────────────────────────────────────
+              if (summary != null)
                 SliverToBoxAdapter(
-                  child: _StatusCard(summary: provider.usageSummary!),
+                  child: _StatusCard(summary: summary),
                 ),
 
-              // Total bundle
-              if (provider.usageSummary?.totalBundle != null) ...[
-                _SectionHeader(title: 'Main Bundle'),
+              // ── Main package usage bars ──────────────────────────────────
+              if (summary?.myPackageInfo != null) ...[
                 SliverToBoxAdapter(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: UsageProgressBar(
-                      usage: provider.usageSummary!.totalBundle!,
+                    padding: const EdgeInsets.fromLTRB(16, 20, 16, 6),
+                    child: Text(
+                      summary!.myPackageInfo!.packageName,
+                      style:
+                          Theme.of(context).textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
                     ),
+                  ),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, i) => Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: UsageProgressBar(
+                          usage: summary.myPackageInfo!.usageDetails[i],
+                        ),
+                      ),
+                    ),
+                    childCount:
+                        summary.myPackageInfo!.usageDetails.length,
                   ),
                 ),
               ],
 
-              // Data packs
-              if (provider.usageSummary?.bonusDataSummary != null ||
-                  provider.usageSummary?.extraGbDataSummary != null) ...[
-                _SectionHeader(title: 'Data Packs'),
-                if (provider.usageSummary?.bonusDataSummary != null)
+              // ── Bonus / Extra GB quick stats ─────────────────────────────
+              if (summary != null &&
+                  (summary.bonusDataSummary != null ||
+                      summary.extraGbDataSummary != null)) ...[
+                _sectionHeader(context, 'Data Packs'),
+                if (summary.bonusDataSummary != null)
                   SliverToBoxAdapter(
-                    child: UsageCard(
+                    child: _SummaryCard(
                       title: 'Bonus Data',
-                      usage: provider.usageSummary!.bonusDataSummary!,
-                      accentColor: Colors.purple,
+                      summary: summary.bonusDataSummary!,
+                      color: Colors.purple,
                       icon: Icons.card_giftcard_rounded,
                     ),
                   ),
-                if (provider.usageSummary?.extraGbDataSummary != null)
+                if (summary.extraGbDataSummary != null)
                   SliverToBoxAdapter(
-                    child: UsageCard(
+                    child: _SummaryCard(
                       title: 'Extra GB',
-                      usage: provider.usageSummary!.extraGbDataSummary!,
-                      accentColor: Colors.orange,
+                      summary: summary.extraGbDataSummary!,
+                      color: Colors.orange,
                       icon: Icons.add_circle_outline_rounded,
                     ),
                   ),
               ],
 
-              // VAS bundles
+              // ── VAS / Add-on bundles ─────────────────────────────────────
               if (provider.vasBundles.isNotEmpty) ...[
-                _SectionHeader(title: 'Add-on Bundles'),
+                _sectionHeader(context, 'Add-on Bundles'),
                 SliverList(
                   delegate: SliverChildBuilderDelegate(
-                    (context, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 4),
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 4),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          child: UsageProgressBar(
-                            usage: provider.vasBundles[index],
-                          ),
-                        ),
+                    (context, i) => Card(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        child: UsageProgressBar(
+                            usage: provider.vasBundles[i]),
                       ),
                     ),
                     childCount: provider.vasBundles.length,
                   ),
                 ),
               ],
+
+              // ── Empty state ──────────────────────────────────────────────
+              if (summary != null &&
+                  summary.myPackageInfo == null &&
+                  provider.vasBundles.isEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Text(
+                      'No usage data available for this connection.',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .onSurfaceVariant,
+                          ),
+                    ),
+                  ),
+                ),
 
               const SliverToBoxAdapter(child: SizedBox(height: 24)),
             ],
@@ -99,27 +145,23 @@ class UsageScreen extends StatelessWidget {
       },
     );
   }
-}
 
-class _SectionHeader extends StatelessWidget {
-  final String title;
-  const _SectionHeader({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
-        child: Text(
-          title,
-          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+  SliverToBoxAdapter _sectionHeader(BuildContext context, String title) =>
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 20, 16, 4),
+          child: Text(
+            title,
+            style: Theme.of(context)
+                .textTheme
+                .titleMedium
+                ?.copyWith(fontWeight: FontWeight.bold),
+          ),
         ),
-      ),
-    );
-  }
+      );
 }
+
+// ── Status card ──────────────────────────────────────────────────────────────
 
 class _StatusCard extends StatelessWidget {
   final UsageSummaryBundle summary;
@@ -171,6 +213,105 @@ class _StatusCard extends StatelessWidget {
     );
   }
 }
+
+// ── Bonus / Extra GB summary card ─────────────────────────────────────────────
+
+class _SummaryCard extends StatelessWidget {
+  final String title;
+  final PackageSummary summary;
+  final Color color;
+  final IconData icon;
+
+  const _SummaryCard({
+    required this.title,
+    required this.summary,
+    required this.color,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final used = double.tryParse(summary.used) ?? 0;
+    final limit = summary.limit != null ? double.tryParse(summary.limit!) : null;
+    final fraction =
+        limit != null && limit > 0 ? (used / limit).clamp(0.0, 1.0) : 0.0;
+    final remaining = limit != null ? (limit - used).clamp(0.0, double.infinity) : null;
+
+    String fmt(double v) =>
+        v == v.truncateToDouble() ? v.toInt().toString() : v.toStringAsFixed(2);
+
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(icon, size: 14, color: color),
+                const SizedBox(width: 4),
+                Text(title,
+                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: color,
+                        )),
+                const Spacer(),
+                if (limit != null)
+                  Text(
+                    '${fmt(used)} / ${fmt(limit)} ${summary.volumeUnit}',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                  )
+                else
+                  Text('${fmt(used)} ${summary.volumeUnit}',
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            color: cs.onSurfaceVariant,
+                          )),
+              ],
+            ),
+            if (limit != null) ...[
+              const SizedBox(height: 8),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: LinearProgressIndicator(
+                  value: fraction,
+                  minHeight: 6,
+                  backgroundColor: cs.surfaceContainerHighest,
+                  valueColor: AlwaysStoppedAnimation<Color>(color),
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const Spacer(),
+                  Text(
+                    'Remaining: ${fmt(remaining!)} ${summary.volumeUnit}',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          color: cs.onSurfaceVariant,
+                        ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '${((1 - fraction) * 100).toStringAsFixed(0)}%',
+                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: color,
+                        ),
+                  ),
+                ],
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Error view ───────────────────────────────────────────────────────────────
 
 class _ErrorView extends StatelessWidget {
   final String message;

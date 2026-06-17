@@ -3,33 +3,28 @@ import '../../features/usage/models/usage_models.dart';
 
 class UsageProgressBar extends StatelessWidget {
   final UsageDetail usage;
-  final bool invertProgress;
 
-  const UsageProgressBar({
-    super.key,
-    required this.usage,
-    this.invertProgress = false,
-  });
+  const UsageProgressBar({super.key, required this.usage});
 
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final displayFraction =
-        invertProgress ? (1 - usage.usedFraction) : usage.usedFraction;
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Name + amount
           Row(
             children: [
               Expanded(
                 child: Text(
                   usage.name,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w500,
-                      ),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(fontWeight: FontWeight.w500),
                 ),
               ),
               if (usage.isUnlimited)
@@ -54,15 +49,19 @@ class UsageProgressBar extends StatelessWidget {
                 ),
             ],
           ),
+
+          // Progress bar
           if (!usage.isUnlimited) ...[
             const SizedBox(height: 6),
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
-                value: displayFraction,
+                value: usage.usedFraction,
                 minHeight: 8,
                 backgroundColor: cs.surfaceContainerHighest,
-                valueColor: AlwaysStoppedAnimation<Color>(cs.primary),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  _barColor(usage.usedFraction, cs),
+                ),
               ),
             ),
             const SizedBox(height: 4),
@@ -76,20 +75,18 @@ class UsageProgressBar extends StatelessWidget {
                         ),
                   ),
                 const Spacer(),
-                if (usage.remaining != null) ...[
+                if (usage.remaining != null)
                   Text(
-                    'Remaining: ${usage.formattedRemaining()} ${usage.volumeUnit}',
+                    'Remaining: ${usage.formattedRemaining()} ${usage.volumeUnit}  ',
                     style: Theme.of(context).textTheme.labelSmall?.copyWith(
                           color: cs.onSurfaceVariant,
                         ),
                   ),
-                  const SizedBox(width: 6),
-                ],
                 Text(
-                  '${usage.remainingPercentage.toStringAsFixed(0)}%',
+                  '${((1 - usage.usedFraction) * 100).toStringAsFixed(0)}%',
                   style: Theme.of(context).textTheme.labelSmall?.copyWith(
                         fontWeight: FontWeight.w600,
-                        color: cs.primary,
+                        color: _barColor(usage.usedFraction, cs),
                       ),
                 ),
               ],
@@ -98,6 +95,13 @@ class UsageProgressBar extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  // Green → orange → red as usage increases
+  Color _barColor(double fraction, ColorScheme cs) {
+    if (fraction < 0.7) return cs.primary;
+    if (fraction < 0.9) return Colors.orange;
+    return Colors.red;
   }
 }
 
@@ -113,107 +117,10 @@ class _UnlimitedBadge extends StatelessWidget {
       child: Text(
         'Unlimited',
         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-              color: Colors.purple,
+              color: const Color(0xFF9C27B0),
               fontWeight: FontWeight.w600,
               fontSize: 9,
             ),
-      ),
-    );
-  }
-}
-
-class UsageCard extends StatelessWidget {
-  final String title;
-  final UsageDetail usage;
-  final Color accentColor;
-  final IconData icon;
-
-  const UsageCard({
-    super.key,
-    required this.title,
-    required this.usage,
-    required this.accentColor,
-    required this.icon,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final cs = Theme.of(context).colorScheme;
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Icon(icon, size: 14, color: accentColor),
-                const SizedBox(width: 4),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: accentColor,
-                      ),
-                ),
-                const Spacer(),
-                if (usage.isUnlimited)
-                  Row(
-                    children: [
-                      Text(
-                        '${usage.formattedUsed()} ${usage.volumeUnit}',
-                        style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: cs.onSurfaceVariant,
-                            ),
-                      ),
-                      const SizedBox(width: 6),
-                      _UnlimitedBadge(),
-                    ],
-                  )
-                else
-                  Text(
-                    '${usage.formattedUsed()} / ${usage.formattedLimit()} ${usage.volumeUnit}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: cs.onSurfaceVariant,
-                        ),
-                  ),
-              ],
-            ),
-            if (!usage.isUnlimited) ...[
-              const SizedBox(height: 8),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(3),
-                child: LinearProgressIndicator(
-                  value: usage.usedFraction,
-                  minHeight: 6,
-                  backgroundColor: cs.surfaceContainerHighest,
-                  valueColor: AlwaysStoppedAnimation<Color>(accentColor),
-                ),
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  const Spacer(),
-                  Text(
-                    'Remaining: ${usage.formattedRemaining()} ${usage.volumeUnit}',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          color: cs.onSurfaceVariant,
-                        ),
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${usage.remainingPercentage.toStringAsFixed(0)}%',
-                    style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: accentColor,
-                        ),
-                  ),
-                ],
-              ),
-            ],
-          ],
-        ),
       ),
     );
   }
