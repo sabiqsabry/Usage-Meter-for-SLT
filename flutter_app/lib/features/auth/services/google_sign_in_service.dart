@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -8,16 +8,14 @@ class GoogleSignInService {
   factory GoogleSignInService() => _instance;
   GoogleSignInService._internal();
 
-  // On Android the client is matched by package name + SHA-1 fingerprint
-  // registered in Google Cloud Console — no clientId needed in code.
-  // On iOS we pass the explicit iOS client ID.
-  // serverClientId makes Google issue a token with MySLT's web client as
-  // the audience so MySLT's LoginExternal endpoint can verify it.
+  // iOS uses explicit client ID; Android is matched by package name + SHA-1.
+  // We do NOT set serverClientId because Google blocks cross-project token
+  // requests. Instead we send our own ID token to MySLT — their backend
+  // verifies the signature and extracts the email without checking the audience.
   final _googleSignIn = GoogleSignIn(
     clientId: defaultTargetPlatform == TargetPlatform.iOS
         ? kGoogleIosClientId
         : null,
-    serverClientId: kMySltGoogleClientId,
     scopes: ['email', 'profile'],
   );
 
@@ -37,16 +35,25 @@ class GoogleSignInService {
 
     final auth = await account.authentication;
 
-    // Prefer the server-audience ID token; fall back to the standard one.
+    // Try ID token first, fall back to access token.
+    // MySLT's backend verifies the Google signature and extracts the email —
+    // the token just needs to be a valid Google-issued credential.
     final idToken = auth.idToken;
-    if (idToken == null || idToken.isEmpty) {
+    final accessToken = auth.accessToken;
+
+    final tokenToSend = (idToken != null && idToken.isNotEmpty)
+        ? idToken
+        : accessToken;
+
+    if (tokenToSend == null || tokenToSend.isEmpty) {
       throw Exception(
-          'Could not retrieve a Google ID token. '
-          'Make sure the iOS Client ID is configured correctly.');
+          'Could not retrieve a Google token. '
+          'Make sure the iOS Client ID is configured correctly in '
+          'Google Cloud Console.');
     }
 
     final result = await _api.loginExternal(
-      idToken: idToken,
+      idToken: tokenToSend,
       email: account.email,
     );
 
