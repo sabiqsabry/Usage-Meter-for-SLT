@@ -8,5 +8,5 @@
 import Foundation
 
 struct Secrets {
-    static let clientId = "YOUR_CLIENT_ID_HERE"
+    static let clientId = "b7402e9d66808f762ccedbe42c20668e"
 }

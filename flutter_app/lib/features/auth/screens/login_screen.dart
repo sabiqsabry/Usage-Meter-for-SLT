@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
+import 'webview_login_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -244,10 +245,65 @@ class _LoginScreenState extends State<LoginScreen> {
                     : const Text('Login'),
               ),
             ),
+
+            const SizedBox(height: 16),
+
+            // Divider
+            Row(
+              children: [
+                const Expanded(child: Divider()),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    'or',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        ),
+                  ),
+                ),
+                const Expanded(child: Divider()),
+              ],
+            ),
+
+            const SizedBox(height: 16),
+
+            // Sign in via MySLT Portal (supports Google Sign-In)
+            OutlinedButton.icon(
+              onPressed: _openPortalLogin,
+              icon: const Icon(Icons.open_in_browser_rounded),
+              label: const Text('Continue with MySLT Portal'),
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size.fromHeight(50),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12)),
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            Text(
+              'Supports Google Sign-In and all other methods available on myslt.slt.lk',
+              style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
+              textAlign: TextAlign.center,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  void _openPortalLogin() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (_) => WebViewLoginScreen(
+        onLoginSuccess: (accessToken, refreshToken, username) {
+          Navigator.of(context).pop();
+          // Mark as authenticated in the provider without re-calling the API.
+          context.read<AuthProvider>().markAuthenticated();
+        },
+      ),
+    ));
   }
 
   Widget _buildDisclaimer(BuildContext context) {

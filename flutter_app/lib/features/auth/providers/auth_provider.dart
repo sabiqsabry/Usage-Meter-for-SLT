@@ -49,6 +49,14 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Called after a successful WebView-based login where tokens are already
+  /// persisted in SecureStorage by the WebViewLoginScreen.
+  void markAuthenticated() {
+    _errorMessage = null;
+    _status = AuthStatus.authenticated;
+    notifyListeners();
+  }
+
   Future<void> logout() async {
     await _api.logout();
     _status = AuthStatus.unauthenticated;

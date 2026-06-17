@@ -2,7 +2,7 @@ const String kBaseUrl = 'https://omniscapp.slt.lk/slt/ext/api';
 
 // Replace with your actual IBM Client ID
 // Obtain from the SLT developer portal or from the original app's Secrets.swift
-const String kClientId = 'YOUR_IBM_CLIENT_ID_HERE';
+const String kClientId = 'b7402e9d66808f762ccedbe42c20668e';
 
 class ApiEndpoints {
   static const String login = '$kBaseUrl/Account/Login';
