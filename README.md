@@ -1,159 +1,139 @@
-# Usage Meter for SLT
+# SLT Usage Meter
 
-Monitor your SLT broadband usage — available as a native iOS/macOS widget app and a cross-platform Flutter app.
+A cross-platform app to monitor your SLT-Mobitel broadband data usage — built with Flutter for iOS, Android, macOS, Windows, Linux, and Web.
 
-## About
-
-This project was originally created by [prabch](https://github.com/prabch/Usage-Meter-for-SLT) as a SwiftUI iOS/macOS widget. This fork extends it with a **cross-platform Flutter app** targeting Android, iOS, macOS, Windows, Linux, and Web.
+Supports both standard username/password login and **Google Sign-In** for accounts registered via Google on [myslt.slt.lk](https://myslt.slt.lk).
 
 ---
 
-## Apps in This Repo
+## Features
 
-### 1. Original SwiftUI App (`SLT Usage Meter/`)
-
-A native iOS & macOS app with home screen widgets.
-
-- **Platforms:** iOS 16+, macOS 13+
-- **Language:** Swift / SwiftUI
-- **Features:** Home screen widgets, Keychain credential storage, iCloud Keychain sync
-
-To build: Open `Usage Meter for SLT.xcodeproj` in Xcode. You will need a `Secrets.swift` file — copy from `Secrets.example.swift` and fill in your IBM Client ID.
-
-### 2. Flutter Cross-Platform App (`flutter_app/`)
-
-A complete rewrite of the UI layer in Flutter, sharing the same MySLT API.
-
-- **Platforms:** Android, iOS, macOS, Windows, Linux, Web
-- **Language:** Dart / Flutter
-- **Architecture:** Feature-first with Provider state management
+- **Usage dashboard** — main package bars, bonus data, extra GB, and all VAS/add-on bundles with colour-coded progress bars
+- **Multiple accounts** — switch between all accounts linked to your SLT login
+- **Google Sign-In** — native OAuth flow (no embedded browser)
+- **Dark mode** — follows system theme via Material 3
+- **Home-screen widgets** — iOS WidgetKit widget and Android AppWidget showing live usage at a glance
+- **Secure storage** — tokens stored in iOS Keychain / Android EncryptedSharedPreferences
+- **Platform-aware** — About section shows whether you're on iPhone, Android, macOS, etc.
 
 ---
 
-## Flutter App Setup
+## Getting Started
 
 ### Prerequisites
 
-- [Flutter SDK](https://docs.flutter.dev/get-started/install) 3.22+
-- Your **IBM Client ID** from the MySLT API (see below)
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (3.x or later)
+- Xcode (for iOS / macOS builds)
+- Android Studio (for Android builds)
+- An SLT-Mobitel account
 
-### 1. Get your Client ID
+### Setup
 
-The `X-Ibm-Client-Id` header is required for all API calls. Obtain it by:
-- Inspecting network traffic from the official MySLT app, or
-- Referencing the original Swift app's `Secrets.swift`
+1. Clone the repo and move into the Flutter project:
 
-### 2. Configure secrets
+   ```bash
+   git clone https://github.com/sabiqsabry/Usage-Meter-for-SLT.git
+   cd Usage-Meter-for-SLT/flutter_app
+   ```
 
-Create `flutter_app/lib/core/constants/secrets.dart`:
+2. Install dependencies:
 
-```dart
-const String kClientId = 'YOUR_IBM_CLIENT_ID_HERE';
-```
+   ```bash
+   flutter pub get
+   ```
 
-> **Note:** `secrets.dart` is gitignored. Never commit your Client ID.
+3. Create `lib/core/constants/secrets.dart` with your IBM API client ID (get it from the MySLT app traffic or the original repo's instructions):
 
-Then update `flutter_app/lib/core/constants/api_constants.dart`:
+   ```dart
+   // lib/core/constants/secrets.dart  — do NOT commit this file
+   const String kClientId = 'YOUR_IBM_CLIENT_ID_HERE';
+   ```
 
-```dart
-import 'secrets.dart'; // replace the inline placeholder
-const String kClientId = clientId; // from secrets.dart
-```
+4. Run on your device:
 
-Or simply replace `'YOUR_IBM_CLIENT_ID_HERE'` in `api_constants.dart` directly (do not commit).
+   ```bash
+   flutter run
+   ```
 
-### 3. Install dependencies
+### Google Sign-In (optional)
 
-```bash
-cd flutter_app
-flutter pub get
-```
+If you want Google Sign-In to work on your own build:
 
-### 4. Run
-
-```bash
-# Android / iOS / macOS / Windows / Linux
-flutter run
-
-# Web
-flutter run -d chrome
-```
+1. Create OAuth 2.0 client IDs in [Google Cloud Console](https://console.cloud.google.com/) for iOS and Android
+2. Fill in `kGoogleIosClientId` and `kGoogleAndroidClientId` in `lib/core/constants/api_constants.dart`
+3. Add the reversed iOS client ID as a URL scheme in `ios/Runner/Info.plist`
 
 ---
 
-## Project Structure (Flutter)
+## Project Structure
 
 ```
-flutter_app/lib/
-├── main.dart                        # App entry point + routing
-├── core/
-│   ├── constants/api_constants.dart # API base URL & endpoints
-│   ├── network/api_client.dart      # HTTP client w/ auto token refresh
-│   ├── storage/secure_storage.dart  # flutter_secure_storage wrapper
-│   └── theme/app_theme.dart         # Material 3 light & dark themes
-└── features/
-    ├── auth/
-    │   ├── models/auth_models.dart
-    │   ├── providers/auth_provider.dart
-    │   └── screens/login_screen.dart
-    ├── usage/
-    │   ├── models/usage_models.dart
-    │   ├── providers/usage_provider.dart
-    │   └── screens/
-    │       ├── home_screen.dart     # Tab container + account selector
-    │       └── usage_screen.dart    # Usage bars, status card, VAS bundles
-    └── account/
-        └── screens/account_screen.dart
+flutter_app/
+├── lib/
+│   ├── core/
+│   │   ├── constants/        # API endpoints, client IDs
+│   │   ├── network/          # HTTP client, token refresh, error handling
+│   │   ├── services/         # WidgetService (home-screen widget data bridge)
+│   │   ├── storage/          # Secure token storage wrapper
+│   │   └── theme/            # Material 3 light/dark themes
+│   ├── features/
+│   │   ├── auth/             # Login screen, Google Sign-In, auth provider
+│   │   └── usage/            # Usage screen, account screen, data models, providers
+│   └── shared/
+│       └── widgets/          # UsageProgressBar and other shared UI components
+├── ios/
+│   ├── Runner/               # Main iOS app
+│   └── SLTUsageMeterWidget/  # iOS WidgetKit extension (Swift)
+└── android/
+    └── app/src/main/
+        ├── kotlin/           # SLTUsageWidget.kt (Android AppWidgetProvider)
+        └── res/              # Widget layouts, drawables, XML provider info
 ```
 
 ---
 
 ## API
 
-The app talks to the **MySLT OMNI API**:
+All data is fetched from the MySLT API:
 
-| Endpoint | Description |
+| Endpoint | Purpose |
 |---|---|
-| `POST /Account/Login` | Authenticate, receive access + refresh tokens |
-| `GET /AccountOMNI/GetAccountDetailRequest` | List registered accounts |
-| `GET /AccountOMNI/GetServiceDetailRequest` | Broadband service details |
-| `GET /BBVAS/UsageSummary` | Usage summary (total, bonus, extra GB) |
-| `GET /BBVAS/GetDashboardVASBundles` | Add-on bundle usage |
-| `POST /Account/RefreshToken` | Exchange refresh token for new access token |
+| `POST /Account/Login` | Username/password login |
+| `POST /Account/LoginExternal` | Social (Google) login |
+| `POST /Account/RefreshToken` | Refresh expired access token |
+| `GET /Account/GetAccountDetails` | Fetch linked accounts |
+| `GET /SLTDetails/GetServiceDetails` | Get broadband service IDs |
+| `GET /BBVAS/UsageSummary` | Main usage summary + package info |
+| `GET /BBVAS/GetVASBundles` | VAS / add-on bundle usage |
 
-All requests require `X-Ibm-Client-Id` header. Authenticated requests also require `authorization: bearer <token>`.
-
-Credentials are exchanged for a secure token and stored locally via the platform keychain — no credentials are ever sent to any third-party server.
-
----
-
-## Features
-
-- Login with MySLT credentials (same as myslt.slt.lk)
-- View broadband usage for all connections under your account
-- Main bundle, bonus data, extra GB, and add-on bundle breakdown
-- Connection status indicator
-- Pull-to-refresh
-- Automatic token refresh (silent re-auth when token expires)
-- Secure credential storage (platform keychain on all platforms)
-- Light & dark mode support
+All requests require `X-Ibm-Client-Id` in the header. Authenticated requests also send `Authorization: Bearer <token>`.
 
 ---
 
-## Planned Features
+## iOS Widget Setup
 
-- Home screen / notification widgets
-- Usage history charts
-- Usage alerts / threshold notifications
-- Multiple account profiles
-- Android quick-tile widget
+The widget reads from a shared App Group (`group.com.sabiqsabry.sltUsageMeter`). To activate it on your own build:
+
+1. Open `ios/Runner.xcworkspace` in Xcode
+2. Go to **File → New Target → Widget Extension**, name it `SLTUsageMeterWidget`
+3. Delete the generated `.swift` file — the real code is already at `ios/SLTUsageMeterWidget/SLTUsageMeterWidget.swift`
+4. Add the App Group `group.com.sabiqsabry.sltUsageMeter` to **both** targets under **Signing & Capabilities**
+5. Build and run, then long-press the home screen to add the widget
 
 ---
-
-## Disclaimer
-
-This is an independent app and is not affiliated with or endorsed by SLT Mobitel. No personal data is collected or stored externally.
 
 ## License
 
-GPL-3.0 — see [LICENSE](LICENSE).
+This project is licensed under the **GNU General Public License v3.0** — see the [LICENSE](LICENSE) file for details.
+
+In short: you are free to use, modify, and distribute this project, but any distributed version must remain open-source under the same license.
+
+---
+
+## Credits
+
+This app is based on the original **Usage Meter for SLT** iOS/macOS app by [Prabhashwara (prabch)](https://github.com/prabch/Usage-Meter-for-SLT), which provided the initial Swift/SwiftUI implementation, API integration, and widget design that this Flutter port builds upon.
+
+---
+
+*This app is an unofficial, community-built tool. It is not affiliated with or endorsed by SLT-Mobitel.*
