@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:google_sign_in/google_sign_in.dart';
 import '../../../core/constants/api_constants.dart';
 import '../../../core/network/api_client.dart';
@@ -7,10 +8,15 @@ class GoogleSignInService {
   factory GoogleSignInService() => _instance;
   GoogleSignInService._internal();
 
-  // serverClientId tells Google to issue an ID token that MySLT's backend
-  // can verify (same audience as the MySLT web portal).
+  // On Android the client is matched by package name + SHA-1 fingerprint
+  // registered in Google Cloud Console — no clientId needed in code.
+  // On iOS we pass the explicit iOS client ID.
+  // serverClientId makes Google issue a token with MySLT's web client as
+  // the audience so MySLT's LoginExternal endpoint can verify it.
   final _googleSignIn = GoogleSignIn(
-    clientId: kGoogleIosClientId,
+    clientId: defaultTargetPlatform == TargetPlatform.iOS
+        ? kGoogleIosClientId
+        : null,
     serverClientId: kMySltGoogleClientId,
     scopes: ['email', 'profile'],
   );

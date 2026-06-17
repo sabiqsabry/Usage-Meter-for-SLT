@@ -5,10 +5,15 @@ const String kBaseUrl = 'https://omniscapp.slt.lk/slt/ext/api';
 const String kMySltGoogleClientId =
     '531709258665-atiep7rt3mrbutfrosms4sset496l026.apps.googleusercontent.com';
 
-// Your iOS OAuth client ID from Google Cloud Console.
-// Replace with the value from console.cloud.google.com → Credentials → iOS client.
+// iOS OAuth client ID from Google Cloud Console.
 const String kGoogleIosClientId =
     '977775449797-henat6gb5l84sfo6ajt240kprm17eb0t.apps.googleusercontent.com';
+
+// Android OAuth client ID from Google Cloud Console.
+// Android auth is matched by package name + SHA-1, not passed in code directly,
+// but stored here for reference and used as a fallback clientId on Android.
+const String kGoogleAndroidClientId =
+    '977775449797-5peik92c4tp2pg8gabtkoc47e2e5mu4n.apps.googleusercontent.com';
 
 // Replace with your actual IBM Client ID
 // Obtain from the SLT developer portal or from the original app's Secrets.swift
