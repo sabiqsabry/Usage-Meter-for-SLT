@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../../core/network/api_client.dart';
+import '../../../core/services/widget_service.dart';
 import '../models/usage_models.dart';
 
 class UsageProvider extends ChangeNotifier {
@@ -101,6 +102,14 @@ class UsageProvider extends ChangeNotifier {
       _vasBundles = rawVas
           .map((e) => UsageDetail.fromJson(e as Map<String, dynamic>))
           .toList();
+      // Update home-screen widget data
+      if (_selectedAccount != null) {
+        WidgetService.saveAndUpdate(
+          subscriberId: _selectedAccount!.telephoneno,
+          summary: _usageSummary,
+          vasBundles: _vasBundles,
+        ).ignore();
+      }
     } on ApiException catch (e) {
       _errorMessage = e.message;
     } catch (e) {

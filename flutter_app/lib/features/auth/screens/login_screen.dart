@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeader(BuildContext context) {
     return Column(
       children: [
-        const Icon(Icons.speed_rounded, size: 48, color: Colors.white),
+        const Icon(Icons.wifi, size: 48, color: Colors.white),
         const SizedBox(height: 12),
         Text(
           'Usage Meter for SLT',
@@ -128,7 +128,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_rounded, size: 18, color: cs.primary),
+                  Icon(Icons.info_outline, size: 18, color: cs.primary),
                   const SizedBox(width: 8),
                   Expanded(
                     child: RichText(
@@ -206,7 +206,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     children: [
-                      const Icon(Icons.warning_rounded,
+                      const Icon(Icons.error_outline,
                           color: Colors.red, size: 16),
                       const SizedBox(width: 6),
                       Expanded(

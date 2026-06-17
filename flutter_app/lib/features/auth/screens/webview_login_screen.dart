@@ -137,7 +137,7 @@ class _WebViewLoginScreenState extends State<WebViewLoginScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.error_outline_rounded,
+                    Icon(Icons.error_outline,
                         size: 48,
                         color: Theme.of(context).colorScheme.error),
                     const SizedBox(height: 12),

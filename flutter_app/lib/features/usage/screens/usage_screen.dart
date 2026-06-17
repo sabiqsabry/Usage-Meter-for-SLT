@@ -86,7 +86,7 @@ class UsageScreen extends StatelessWidget {
                       title: 'Bonus Data',
                       summary: summary.bonusDataSummary!,
                       color: Colors.purple,
-                      icon: Icons.card_giftcard_rounded,
+                      icon: Icons.card_giftcard,
                     ),
                   ),
                 if (summary.extraGbDataSummary != null)
@@ -95,7 +95,7 @@ class UsageScreen extends StatelessWidget {
                       title: 'Extra GB',
                       summary: summary.extraGbDataSummary!,
                       color: Colors.orange,
-                      icon: Icons.add_circle_outline_rounded,
+                      icon: Icons.add_circle_outline,
                     ),
                   ),
               ],
@@ -206,7 +206,7 @@ class _StatusCard extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            const Icon(Icons.wifi_rounded, color: Colors.white, size: 28),
+            const Icon(Icons.wifi, color: Colors.white, size: 28),
           ],
         ),
       ),
@@ -327,7 +327,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline_rounded,
+            Icon(Icons.error_outline,
                 size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 12),
             Text(message,
@@ -336,7 +336,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             FilledButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh_rounded),
+              icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
             ),
           ],

@@ -15,8 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   static const _tabs = [
-    (label: 'Usage', icon: Icons.speed_rounded),
-    (label: 'Account', icon: Icons.person_rounded),
+    (label: 'Usage', icon: Icons.data_usage),
+    (label: 'Account', icon: Icons.person_outline),
   ];
 
   static const _bodies = <Widget>[
@@ -68,7 +68,7 @@ class _AccountSelectorButton extends StatelessWidget {
         if (provider.accounts.length <= 1) return const SizedBox.shrink();
 
         return PopupMenuButton(
-          icon: const Icon(Icons.account_circle_outlined),
+          icon: const Icon(Icons.account_circle),
           tooltip: 'Select account',
           itemBuilder: (_) => provider.accounts
               .map((acc) => PopupMenuItem(
@@ -76,7 +76,7 @@ class _AccountSelectorButton extends StatelessWidget {
                     child: Row(
                       children: [
                         if (provider.selectedAccount == acc)
-                          const Icon(Icons.check_rounded, size: 18)
+                          const Icon(Icons.check_circle_outline, size: 18)
                         else
                           const SizedBox(width: 18),
                         const SizedBox(width: 8),

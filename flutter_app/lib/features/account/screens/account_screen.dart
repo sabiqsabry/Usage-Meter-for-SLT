@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../auth/providers/auth_provider.dart';
@@ -39,10 +41,10 @@ class AccountScreen extends StatelessWidget {
         // App info card
         _SectionCard(
           title: 'About',
-          children: const [
-            _InfoRow(label: 'App', value: 'SLT Usage Meter'),
-            _InfoRow(label: 'Version', value: '1.0.0'),
-            _InfoRow(label: 'Platform', value: 'Cross-platform (Flutter)'),
+          children: [
+            const _InfoRow(label: 'App', value: 'SLT Usage Meter'),
+            const _InfoRow(label: 'Version', value: '1.0.0'),
+            _InfoRow(label: 'Platform', value: _platformLabel()),
           ],
         ),
 
@@ -73,7 +75,7 @@ class AccountScreen extends StatelessWidget {
                 await auth.logout();
               }
             },
-            icon: const Icon(Icons.logout_rounded),
+            icon: const Icon(Icons.logout),
             label: const Text('Logout'),
             style: OutlinedButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,
@@ -142,6 +144,16 @@ class _SectionCard extends StatelessWidget {
       ],
     );
   }
+}
+
+String _platformLabel() {
+  if (kIsWeb) return 'Web';
+  if (Platform.isIOS) return 'iPhone (iOS ${Platform.operatingSystemVersion.split(' ').first})';
+  if (Platform.isAndroid) return 'Android';
+  if (Platform.isMacOS) return 'macOS';
+  if (Platform.isWindows) return 'Windows';
+  if (Platform.isLinux) return 'Linux';
+  return 'Unknown';
 }
 
 class _InfoRow extends StatelessWidget {
