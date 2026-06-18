@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/usage_provider.dart';
@@ -15,8 +16,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   static const _tabs = [
-    (label: 'Usage',   icon: Icons.bar_chart,    selectedIcon: Icons.bar_chart),
-    (label: 'Account', icon: Icons.person_outline, selectedIcon: Icons.person),
+    (label: 'Usage',   icon: CupertinoIcons.chart_bar,    selectedIcon: CupertinoIcons.chart_bar_fill),
+    (label: 'Account', icon: CupertinoIcons.person,        selectedIcon: CupertinoIcons.person_fill),
   ];
 
   static const _bodies = <Widget>[
@@ -69,7 +70,7 @@ class _AccountSelectorButton extends StatelessWidget {
         if (provider.accounts.length <= 1) return const SizedBox.shrink();
 
         return PopupMenuButton(
-          icon: const Icon(Icons.account_circle),
+          icon: const Icon(CupertinoIcons.person_circle),
           tooltip: 'Select account',
           itemBuilder: (_) => provider.accounts
               .map((acc) => PopupMenuItem(
@@ -77,7 +78,7 @@ class _AccountSelectorButton extends StatelessWidget {
                     child: Row(
                       children: [
                         if (provider.selectedAccount == acc)
-                          const Icon(Icons.check_circle_outline, size: 18)
+                          const Icon(CupertinoIcons.checkmark_circle, size: 18)
                         else
                           const SizedBox(width: 18),
                         const SizedBox(width: 8),

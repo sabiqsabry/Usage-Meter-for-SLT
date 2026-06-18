@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -75,7 +76,7 @@ class AccountScreen extends StatelessWidget {
                 await auth.logout();
               }
             },
-            icon: const Icon(Icons.logout),
+            icon: const Icon(CupertinoIcons.square_arrow_right),
             label: const Text('Logout'),
             style: OutlinedButton.styleFrom(
               foregroundColor: Theme.of(context).colorScheme.error,

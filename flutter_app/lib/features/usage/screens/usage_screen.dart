@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/usage_provider.dart';
@@ -86,7 +87,7 @@ class UsageScreen extends StatelessWidget {
                       title: 'Bonus Data',
                       summary: summary.bonusDataSummary!,
                       color: Colors.purple,
-                      icon: Icons.card_giftcard,
+                      icon: CupertinoIcons.gift,
                     ),
                   ),
                 if (summary.extraGbDataSummary != null)
@@ -95,7 +96,7 @@ class UsageScreen extends StatelessWidget {
                       title: 'Extra GB',
                       summary: summary.extraGbDataSummary!,
                       color: Colors.orange,
-                      icon: Icons.add_circle_outline,
+                      icon: CupertinoIcons.plus_circle,
                     ),
                   ),
               ],
@@ -206,7 +207,7 @@ class _StatusCard extends StatelessWidget {
               ],
             ),
             const Spacer(),
-            const Icon(Icons.wifi, color: Colors.white, size: 28),
+            const Icon(CupertinoIcons.wifi, color: Colors.white, size: 28),
           ],
         ),
       ),
@@ -327,7 +328,7 @@ class _ErrorView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.error_outline,
+            Icon(CupertinoIcons.exclamationmark_circle,
                 size: 48, color: Theme.of(context).colorScheme.error),
             const SizedBox(height: 12),
             Text(message,
@@ -336,7 +337,7 @@ class _ErrorView extends StatelessWidget {
             const SizedBox(height: 16),
             FilledButton.icon(
               onPressed: onRetry,
-              icon: const Icon(Icons.refresh),
+              icon: const Icon(CupertinoIcons.refresh),
               label: const Text('Retry'),
             ),
           ],

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/auth_provider.dart';
@@ -85,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildHeader(BuildContext context) {
     return Column(
       children: [
-        const Icon(Icons.wifi, size: 48, color: Colors.white),
+        const Icon(CupertinoIcons.wifi, size: 48, color: Colors.white),
         const SizedBox(height: 12),
         Text(
           'Usage Meter for SLT',
@@ -128,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info_outline, size: 18, color: cs.primary),
+                  Icon(CupertinoIcons.info_circle, size: 18, color: cs.primary),
                   const SizedBox(width: 8),
                   Expanded(
                     child: RichText(
@@ -188,8 +189,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 suffixIcon: IconButton(
                   icon: Icon(
                     _obscurePassword
-                        ? Icons.visibility_outlined
-                        : Icons.visibility_off_outlined,
+                        ? CupertinoIcons.eye
+                        : CupertinoIcons.eye_slash,
                   ),
                   onPressed: () =>
                       setState(() => _obscurePassword = !_obscurePassword),
@@ -206,7 +207,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   padding: const EdgeInsets.only(bottom: 8),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline,
+                      const Icon(CupertinoIcons.exclamationmark_circle,
                           color: Colors.red, size: 16),
                       const SizedBox(width: 6),
                       Expanded(
