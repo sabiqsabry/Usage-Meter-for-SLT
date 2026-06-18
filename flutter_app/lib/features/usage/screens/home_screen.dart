@@ -15,8 +15,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   static const _tabs = [
-    (label: 'Usage', icon: Icons.data_usage),
-    (label: 'Account', icon: Icons.person_outline),
+    (label: 'Usage',   icon: Icons.bar_chart,    selectedIcon: Icons.bar_chart),
+    (label: 'Account', icon: Icons.person_outline, selectedIcon: Icons.person),
   ];
 
   static const _bodies = <Widget>[
@@ -52,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
           for (final tab in _tabs)
             NavigationDestination(
               icon: Icon(tab.icon),
+              selectedIcon: Icon(tab.selectedIcon),
               label: tab.label,
             ),
         ],
